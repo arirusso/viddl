@@ -6,32 +6,46 @@ module Viddl
 
       attr_reader :id, :source_url
 
+      # @param [String] url The url of the video source
       def initialize(url)
         @source_url = url
 
         populate_id
       end
 
+      # Cut the video source using the given options
+      # @param [Hash] options
+      # @option options [Numeric] :start Time in the source file where the clip starts
+      # @option options [Numeric] :duration Duration of the clip
+      # @option options [Numeric] :end Time in the source file where the clip ends
+      # @return [Array<Clip>]
       def cut(options = {})
-        filenames.map do |filename|
+        source_filenames.map do |filename|
           Clip.process(filename, options)
         end
       end
 
+      # Download the video source
+      # @param [Hash] options
+      # @return [Download]
       def download(options = {})
-        @is_downloaded = Download.process(self, options)
+        @download = Download.process(self, options)
       end
 
-      def filenames
-        if @is_downloaded
-          @filenames = Dir["#{Download::TEMPDIR}/#{@id}*"]
-        else
+      # The downloaded source filenames
+      # @return [Array<String>]
+      def source_filenames
+        if @download.nil?
           raise "File must be downloaded"
+        else
+          @source_filenames = Dir["#{Download::TEMPDIR}/#{@id}*"]
         end
       end
 
       private
 
+      # The video instance id
+      # @return [String]
       def populate_id
         @id = @source_url.scan(/youtube.com\/watch\?v\=(\S*)&?/).flatten.first
       end
