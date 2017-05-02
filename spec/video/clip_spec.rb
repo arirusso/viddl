@@ -3,10 +3,19 @@ require "helper"
 describe Viddl::Video::Clip do
 
   before(:each) do
-    @clip = Viddl::Video::Clip.new("a url")
+    @clip = Viddl::Video::Clip.new("/tmp/6g4dkBF5anU.mkv")
   end
 
-  context "time args" do
+  context "#output_path" do
+
+    it "matches source path file name" do
+      path = @clip.send(:output_path)
+      expect(path).to(eq("6g4dkBF5anU.mkv"))
+    end
+    
+  end
+
+  context "#time_args" do
 
     it "has correct args with only start time" do
       options = {
