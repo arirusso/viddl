@@ -27,7 +27,9 @@ module Viddl
         if !options[:start].nil?
           args += " -ss #{options[:start]}"
         end
-        if !options[:duration].nil? && options[:end].nil?
+        if !options[:duration].nil? && !options[:end].nil?
+          raise "Can not use both end time and duration"
+        elsif !options[:duration].nil? && options[:end].nil?
           args += " -t #{options[:duration]}"
         elsif options[:duration].nil? && !options[:end].nil?
           duration = options[:end] - options[:start]
