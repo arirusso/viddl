@@ -13,7 +13,6 @@ module Viddl
       end
 
       def process(options = {})
-        p command_line(options)
         system(command_line(options))
       end
 
