@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+$LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
+
+require "optparse"
+require "viddl"
+
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: example.rb [options]"
+
+  opts.on("-dDURATION", "--duration=DURATION", "Duration") do |duration|
+    options[:duration] = duration.to_f
+  end
+
+  opts.on("-eEND", "--end=END", "End time") do |en|
+    options[:end] = en.to_f
+  end
+
+  opts.on("-sSTART", "--start=START", "Start time") do |start|
+    options[:start] = start.to_f
+  end
+end.parse!
+
+url = ARGV[0]
+
+video = Viddl.download(url)
+video.cut(start: options[:start], duration: options[:duration], end: options[:end])
