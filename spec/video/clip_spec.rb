@@ -7,6 +7,77 @@ describe Viddl::Video::Clip do
     @clip = Viddl::Video::Clip.new(@source_file)
   end
 
+  context "#process" do
+
+    before(:each) do
+      Kernel.stub(:system)
+    end
+
+    context "with no options" do
+
+      it "execs command line" do
+        @options = {}
+        expect(Kernel).to receive(:system)
+        @result = @clip.send(:process, @options)
+      end
+
+    end
+
+    context "with duration" do
+
+      it "execs command line" do
+        @options = {
+          duration: 12
+        }
+        expect(Kernel).to receive(:system)
+        @result = @clip.send(:process, @options)
+      end
+
+    end
+
+    context "with start time and duration" do
+
+      it "execs command line" do
+        @options = {
+          start: 10,
+          duration: 15
+        }
+        expect(Kernel).to receive(:system)
+        @result = @clip.send(:process, @options)
+      end
+
+    end
+
+    context "with start and end time" do
+
+      it "execs command line" do
+        @options = {
+          start: 8,
+          end: 15
+        }
+        expect(Kernel).to receive(:system)
+        @result = @clip.send(:process, @options)
+      end
+
+    end
+
+    context "with start, end time and duration" do
+
+      it "raises" do
+        @options = {
+          duration: 5,
+          end: 15,
+          start: 10
+        }
+        expect {
+          @clip.send(:process, @options)
+        }.to(raise_error(RuntimeError))
+      end
+
+    end
+
+  end
+
   context "#command_line" do
 
     context "with no options" do
