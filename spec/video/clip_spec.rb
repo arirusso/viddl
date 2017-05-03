@@ -8,48 +8,73 @@ describe Viddl::Video::Clip do
 
   context "#output_path" do
 
-    it "matches source path file name" do
-      path = @clip.send(:output_path)
-      expect(path).to(eq("6g4dkBF5anU.mkv"))
+    context "with no args" do
+
+      it "matches source path file name" do
+        path = @clip.send(:output_path)
+        expect(path).to(eq("6g4dkBF5anU.mkv"))
+      end
+
     end
-    
+
+  end
+
+  context "#duration_from_options" do
+
+    context "with end time" do
+
+      it "has correct duration" do
+        options = {
+          start: 10,
+          end: 15
+        }
+        args = @clip.send(:duration_from_options, options)
+        expect(args).to(eq(5))
+      end
+
+    end
+
+    context "with end time and duration" do
+
+      it "raises" do
+        options = {
+          duration: 3,
+          end: 15
+        }
+        expect {
+          @clip.send(:duration_from_options, options)
+        }.to(raise_error(RuntimeError))
+      end
+
+    end
+
   end
 
   context "#time_args" do
 
-    it "has correct args with only start time" do
-      options = {
-        start: 10
-      }
-      args = @clip.send(:time_args, options)
-      expect(args).to(eq(" -ss 10"))
+    context "with only start time" do
+
+      it "has correct args" do
+        options = {
+          start: 10
+        }
+        args = @clip.send(:time_args, options)
+        expect(args).to(eq(" -ss 10"))
+      end
+
     end
 
-    it "has correct args with start time and end time" do
-      options = {
-        start: 10,
-        end: 15
-      }
-      args = @clip.send(:time_args, options)
-      expect(args).to(eq(" -ss 10 -t 5"))
-    end
+    context "with start time and duration" do
 
-    it "has correct args with start time and duration" do
-      options = {
-        start: 10,
-        duration: 15
-      }
-      args = @clip.send(:time_args, options)
-      expect(args).to(eq(" -ss 10 -t 15"))
-    end
+      it "has correct args" do
+        options = {
+          start: 10,
+          duration: 15
+        }
+        args = @clip.send(:time_args, options)
+        expect(args).to(eq(" -ss 10 -t 15"))
+      end
 
-    it "raises if end time and duration are included" do
-      options = {
-        start: 10,
-        end: 15,
-        duration: 3
-      }
-      expect { @clip.send(:time_args, options) }.to(raise_error(RuntimeError))
     end
 
   end
