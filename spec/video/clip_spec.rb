@@ -109,6 +109,76 @@ describe Viddl::Video::Clip do
 
   end
 
+  context "#options_formatted" do
+
+    context "with no options" do
+
+      it "returns empty hash" do
+        options = {}
+        args = @clip.send(:options_formatted, options)
+        expect(args.values.any?).to(be false)
+      end
+
+    end
+
+    context "with duration" do
+
+      it "has duration" do
+        options = {
+          duration: 12
+        }
+        args = @clip.send(:options_formatted, options)
+        expect(args[:start]).to(be_nil)
+        expect(args[:duration]).to(eq(12))
+      end
+
+    end
+
+    context "with start time and duration" do
+
+      it "has duration and start time" do
+        options = {
+          start: 10,
+          duration: 15
+        }
+        args = @clip.send(:options_formatted, options)
+        expect(args[:start]).to(eq(10))
+        expect(args[:duration]).to(eq(15))
+      end
+
+    end
+
+    context "with start and end time" do
+
+      it "has duration and start time" do
+        options = {
+          start: 8,
+          end: 15
+        }
+        args = @clip.send(:options_formatted, options)
+        expect(args[:start]).to(eq(8))
+        expect(args[:duration]).to(eq(7))
+      end
+
+    end
+
+    context "with start, end time and duration" do
+
+      it "raises" do
+        options = {
+          duration: 5,
+          end: 15,
+          start: 10
+        }
+        expect {
+          @clip.send(:options_formatted, options)
+        }.to(raise_error(RuntimeError))
+      end
+
+    end
+
+  end
+
   context "#time_args" do
 
     context "with no options" do
