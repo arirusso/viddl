@@ -6,6 +6,77 @@ describe Viddl::Video::Clip do
     @clip = Viddl::Video::Clip.new("/tmp/6g4dkBF5anU.mkv")
   end
 
+  context "#command_line" do
+
+    context "with no options" do
+
+      it "returns empty hash" do
+        options = {}
+        result = @clip.send(:command_line, options)
+        expect(result).to_not(include("-ss"))
+        expect(result).to_not(include("-t"))
+      end
+
+    end
+
+    context "with duration" do
+
+      it "has duration" do
+        options = {
+          duration: 12
+        }
+        result = @clip.send(:command_line, options)
+        expect(result).to_not(include("-ss"))
+        expect(result).to(include("-t 12"))
+      end
+
+    end
+
+    context "with start time and duration" do
+
+      it "has duration and start time" do
+        options = {
+          start: 10,
+          duration: 15
+        }
+        result = @clip.send(:command_line, options)
+        expect(result).to(include("-ss 10"))
+        expect(result).to(include("-t 15"))
+      end
+
+    end
+
+    context "with start and end time" do
+
+      it "has duration and start time" do
+        options = {
+          start: 8,
+          end: 15
+        }
+        result = @clip.send(:command_line, options)
+        expect(result).to(include("-ss 8"))
+        expect(result).to(include("-t 7"))
+      end
+
+    end
+
+    context "with start, end time and duration" do
+
+      it "raises" do
+        options = {
+          duration: 5,
+          end: 15,
+          start: 10
+        }
+        expect {
+          @clip.send(:command_line, options)
+        }.to(raise_error(RuntimeError))
+      end
+
+    end
+
+  end
+
   context "#output_path" do
 
     context "with no options" do
