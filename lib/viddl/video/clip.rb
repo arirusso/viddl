@@ -41,35 +41,76 @@ module Viddl
       # @option options [Numeric] :end Time in the source file where the clip ends
       # @return [String]
       def command_line(options = {})
-        "ffmpeg -i #{@source_path} #{time_args(options)} -c:v copy -c:a copy #{output_path}"
+        times = options_formatted(options)
+        "ffmpeg -i #{@source_path} #{time_args(times)} -c:v copy -c:a copy #{output_path(times)}"
+      end
+
+      # Options formatted for ffmpeg
+      # @param [Hash] options
+      # @option options [Numeric] :start Time in the source file where the clip starts
+      # @option options [Numeric] :duration Duration of the clip
+      # @option options [Numeric] :end Time in the source file where the clip ends
+      # @return [Hash]
+      def options_formatted(options = {})
+        result = {}
+        result[:start] = options[:start]
+        result[:duration] = duration_from_options(options)
+        result
+      end
+
+      # Numeric duration for the given options
+      # @param [Hash] options
+      # @option options [Numeric] :duration Duration of the clip
+      # @option options [Numeric] :end Time in the source file where the clip ends
+      # @return [Numeric]
+      def duration_from_options(options = {})
+        duration = nil
+        if !options[:duration].nil? && !options[:end].nil?
+          raise "Can not use both end time and duration"
+        elsif !options[:duration].nil? && options[:end].nil?
+          duration = options[:duration]
+        elsif options[:duration].nil? && !options[:end].nil?
+          duration = options[:end] - options[:start]
+        end
+        duration
       end
 
       # Command line options for the given time constraints
       # @param [Hash] options
       # @option options [Numeric] :start Time in the source file where the clip starts
       # @option options [Numeric] :duration Duration of the clip
-      # @option options [Numeric] :end Time in the source file where the clip ends
       # @return [String]
       def time_args(options = {})
         args = ""
-        if !options[:start].nil?
+        unless options[:start].nil?
           args += " -ss #{options[:start]}"
         end
-        if !options[:duration].nil? && !options[:end].nil?
-          raise "Can not use both end time and duration"
-        elsif !options[:duration].nil? && options[:end].nil?
+        unless options[:duration].nil?
           args += " -t #{options[:duration]}"
-        elsif options[:duration].nil? && !options[:end].nil?
-          duration = options[:end] - options[:start]
-          args += " -t #{duration}"
         end
         args
       end
 
       # Path of the created clip
+      # @param [Hash] options
+      # @option options [Numeric] :start Time in the source file where the clip starts
+      # @option options [Numeric] :duration Duration of the clip
       # @return [String]
-      def output_path
-        @source_path.scan(/#{Download::TEMPDIR}\/(.*)/).flatten.first
+      def output_path(options = {})
+        base = @source_path.scan(/#{Download::TEMPDIR}\/(.*)/).flatten.first
+        result = base
+        if !options.values.flatten.compact.empty?
+          name, ext = *base.split(".")
+          time_string = ""
+          unless options[:start].nil?
+            time_string += "s#{options[:start]}"
+          end
+          unless options[:duration].nil?
+            time_string += "d#{options[:duration]}"
+          end
+          result = "#{name}-#{time_string}.#{ext}"
+        end
+        result
       end
 
     end
