@@ -17,6 +17,43 @@ describe Viddl::Video::Clip do
 
     end
 
+    context "with start time" do
+
+      it "matches source path file name" do
+        options = {
+          start: 10
+        }
+        path = @clip.send(:output_path, options)
+        expect(path).to(eq("6g4dkBF5anU-s10.mkv"))
+      end
+
+    end
+
+    context "with duration" do
+
+      it "matches source path file name" do
+        options = {
+          duration: 1.5
+        }
+        path = @clip.send(:output_path, options)
+        expect(path).to(eq("6g4dkBF5anU-d1.5.mkv"))
+      end
+
+    end
+
+    context "with start time and duration" do
+
+      it "matches source path file name" do
+        options = {
+          duration: 12,
+          start: 6
+        }
+        path = @clip.send(:output_path, options)
+        expect(path).to(eq("6g4dkBF5anU-s6d12.mkv"))
+      end
+
+    end
+
   end
 
   context "#duration_from_options" do
