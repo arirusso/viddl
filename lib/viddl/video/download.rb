@@ -25,7 +25,7 @@ module Viddl
       # @param [Hash] options
       # @return [Boolean]
       def process(options = {})
-        result = system(command_line)
+        result = Kernel.system(command_line)
         raise(result.to_s) unless result
         true
       end
