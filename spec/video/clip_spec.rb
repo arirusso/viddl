@@ -9,10 +9,6 @@ describe Viddl::Video::Clip do
 
   context "#process" do
 
-    before(:each) do
-      Kernel.stub(:system)
-    end
-
     context "with no options" do
 
       it "execs command line" do
