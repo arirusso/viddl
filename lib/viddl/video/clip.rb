@@ -29,7 +29,7 @@ module Viddl
       # @option options [Numeric] :end Time in the source file where the clip ends
       # @return [Boolean]
       def process(options = {})
-        system(command_line(options))
+        Kernel.system(command_line(options))
       end
 
       private
