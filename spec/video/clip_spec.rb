@@ -8,7 +8,7 @@ describe Viddl::Video::Clip do
 
   context "#output_path" do
 
-    context "with no args" do
+    context "with no options" do
 
       it "matches source path file name" do
         path = @clip.send(:output_path)
@@ -58,6 +58,28 @@ describe Viddl::Video::Clip do
 
   context "#duration_from_options" do
 
+    context "with no options" do
+
+      it "returns nil" do
+        options = {}
+        args = @clip.send(:duration_from_options, options)
+        expect(args).to(eq(nil))
+      end
+
+    end
+
+    context "with duration" do
+
+      it "has correct duration" do
+        options = {
+          duration: 12
+        }
+        args = @clip.send(:duration_from_options, options)
+        expect(args).to(eq(12))
+      end
+
+    end
+
     context "with end time" do
 
       it "has correct duration" do
@@ -88,6 +110,16 @@ describe Viddl::Video::Clip do
   end
 
   context "#time_args" do
+
+    context "with no options" do
+
+      it "has correct args" do
+        options = {}
+        args = @clip.send(:time_args, options)
+        expect(args).to(eq(""))
+      end
+
+    end
 
     context "with only start time" do
 
