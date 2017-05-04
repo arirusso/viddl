@@ -7,8 +7,8 @@ module Viddl
     # Validate that the system has all of its dependencies
     # @return [Boolean]
     def validate
-      validate_youtube_dl
       validate_ffmpeg
+      validate_youtube_dl
       true
     end
 
