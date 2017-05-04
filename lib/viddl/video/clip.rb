@@ -65,7 +65,7 @@ module Viddl
           formatted_opts = options_formatted(options)
           module_args = MODULES.map { |mod| mod.args(formatted_opts) }
           module_arg_string = module_args.compact.reject(&:empty?).join(" ")
-          "ffmpeg -i #{@source_path} #{module_arg_string} -c:v copy -c:a copy #{output_path(formatted_opts)}"
+          "ffmpeg -i #{@source_path} #{module_arg_string} #{output_path(formatted_opts)}"
         end
       end
 
