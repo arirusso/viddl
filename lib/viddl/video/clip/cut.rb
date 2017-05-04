@@ -27,14 +27,14 @@ module Viddl
         # @option options [Numeric] :duration Duration of the clip
         # @return [String]
         def args(options = {})
-          args = ""
+          args = []
           unless options[:start].nil?
-            args += " -ss #{options[:start]}"
+            args << "-ss #{options[:start]}"
           end
           unless options[:duration].nil?
-            args += " -t #{options[:duration]}"
+            args << "-t #{options[:duration]}"
           end
-          args
+          args.join(" ")
         end
 
         # Token added to clip filename for cut args

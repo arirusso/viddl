@@ -223,7 +223,7 @@ describe Viddl::Video::Clip::Cut do
           start: 10
         }
         args = Viddl::Video::Clip::Cut.send(:args, options)
-        expect(args).to(eq(" -ss 10"))
+        expect(args).to(eq("-ss 10"))
       end
 
     end
@@ -236,7 +236,7 @@ describe Viddl::Video::Clip::Cut do
           duration: 15
         }
         args = Viddl::Video::Clip::Cut.send(:args, options)
-        expect(args).to(eq(" -ss 10 -t 15"))
+        expect(args).to(eq("-ss 10 -t 15"))
       end
 
     end

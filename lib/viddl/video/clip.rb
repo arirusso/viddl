@@ -9,6 +9,8 @@ module Viddl
 
     class Clip
 
+      MODULES = [Audio, Cut, Resize]
+
       # Create a clip using the given video source file path and options
       # @param [String] source_path Path to video file to create clip from
       # @param [Hash] options
@@ -51,9 +53,11 @@ module Viddl
           # over to the output file location without using ffmpeg
           "cp #{@source_path} #{output_path}"
         else
-          opts = options_formatted(options)
-          optional_args = " #{Cut.args(opts)} #{Audio.args(opts)}"
-          "ffmpeg -i #{@source_path}#{optional_args} -c:v copy -c:a copy #{output_path(opts)}"
+          formatted_opts = options_formatted(options)
+          module_args = ""
+          module_args = MODULES.map { |mod| mod.args(formatted_opts) }
+          module_arg_string = module_args.compact.reject(&:empty?).join(" ")
+          "ffmpeg -i #{@source_path} #{module_arg_string} -c:v copy -c:a copy #{output_path(formatted_opts)}"
         end
       end
 
@@ -81,13 +85,12 @@ module Viddl
         result = base
         if !options.values.flatten.compact.empty?
           name, ext = *base.split(".")
-          option_string = ""
-          option_string += Cut.filename_token(options)
-          if !option_string.empty?
-            option_string = "-#{option_string}"
+          tokens = ""
+          MODULES.each do |mod|
+            token = mod.filename_token(options)
+            tokens += "-#{token}" unless token.empty?
           end
-          option_string += Audio.filename_token(options)
-          result = "#{name}#{option_string}.#{ext}"
+          result = "#{name}#{tokens}.#{ext}"
         end
         result
       end

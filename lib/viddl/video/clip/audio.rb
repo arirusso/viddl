@@ -21,7 +21,7 @@ module Viddl
         # Command line options for audio
         # @param [Hash] options
         # @option options [Boolean] :audio Whether to include audio (default: false)
-        # @return [Hash]
+        # @return [String]
         def args(options = {})
           args = ""
           unless options[:audio]
@@ -35,11 +35,7 @@ module Viddl
         # @option options [Boolean] :audio Whether to include audio in the clip (default: false)
         # @return [String]
         def filename_token(options = {})
-          args = ""
-          unless options[:audio]
-            args += "-noaudio"
-          end
-          args
+          options[:audio] ? "" : "noaudio"
         end
 
       end
