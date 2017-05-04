@@ -19,55 +19,59 @@ describe Viddl::Video::Clip do
 
     end
 
-    context "with duration" do
+    context "cut options" do
 
-      it "execs command line" do
-        @options = {
-          duration: 12
-        }
-        expect(Kernel).to receive(:system)
-        @result = @clip.send(:process, @options)
+      context "with duration" do
+
+        it "execs command line" do
+          @options = {
+            duration: 12
+          }
+          expect(Kernel).to receive(:system)
+          @result = @clip.send(:process, @options)
+        end
+
       end
 
-    end
+      context "with start time and duration" do
 
-    context "with start time and duration" do
+        it "execs command line" do
+          @options = {
+            start: 10,
+            duration: 15
+          }
+          expect(Kernel).to receive(:system)
+          @result = @clip.send(:process, @options)
+        end
 
-      it "execs command line" do
-        @options = {
-          start: 10,
-          duration: 15
-        }
-        expect(Kernel).to receive(:system)
-        @result = @clip.send(:process, @options)
       end
 
-    end
+      context "with start and end time" do
 
-    context "with start and end time" do
+        it "execs command line" do
+          @options = {
+            start: 8,
+            end: 15
+          }
+          expect(Kernel).to receive(:system)
+          @result = @clip.send(:process, @options)
+        end
 
-      it "execs command line" do
-        @options = {
-          start: 8,
-          end: 15
-        }
-        expect(Kernel).to receive(:system)
-        @result = @clip.send(:process, @options)
       end
 
-    end
+      context "with start, end time and duration" do
 
-    context "with start, end time and duration" do
+        it "raises" do
+          @options = {
+            duration: 5,
+            end: 15,
+            start: 10
+          }
+          expect {
+            @clip.send(:process, @options)
+          }.to(raise_error(RuntimeError))
+        end
 
-      it "raises" do
-        @options = {
-          duration: 5,
-          end: 15,
-          start: 10
-        }
-        expect {
-          @clip.send(:process, @options)
-        }.to(raise_error(RuntimeError))
       end
 
     end
@@ -117,79 +121,133 @@ describe Viddl::Video::Clip do
 
     end
 
-    context "with duration" do
+    context "with resize options" do
 
-      before(:each) do
-        @options = {
-          duration: 12
-        }
-        @result = @clip.send(:command_line, @options)
+      context "with width only" do
+
+        before(:each) do
+          @options = {
+            width: 1024
+          }
+          @result = @clip.send(:command_line, @options)
+        end
+
+        it "has correct scale arg" do
+          expect(@result).to(include("-vf scale=1024:-1"))
+        end
+
       end
 
-      it "includes file name" do
-        expect(@result).to(include(@source_file))
+      context "with height only" do
+
+        before(:each) do
+          @options = {
+            height: 768
+          }
+          @result = @clip.send(:command_line, @options)
+        end
+
+        it "has correct scale arg" do
+          expect(@result).to(include("-vf scale=-1:768"))
+        end
+
       end
 
-      it "has duration" do
-        expect(@result).to_not(include("-ss"))
-        expect(@result).to(include("-t 12"))
-      end
+      context "with width and height" do
 
-    end
+        before(:each) do
+          @options = {
+            width: 1920,
+            height: 1280
+          }
+          @result = @clip.send(:command_line, @options)
+        end
 
-    context "with start time and duration" do
+        it "has correct scale arg" do
+          expect(@result).to(include("-vf scale=1920:1280"))
+        end
 
-      before(:each) do
-        @options = {
-          start: 10,
-          duration: 15
-        }
-        @result = @clip.send(:command_line, @options)
-      end
-
-      it "includes file name" do
-        expect(@result).to(include(@source_file))
-      end
-
-      it "has duration and start time" do
-        expect(@result).to(include("-ss 10"))
-        expect(@result).to(include("-t 15"))
-      end
-
-    end
-
-    context "with start and end time" do
-
-      before(:each) do
-        @options = {
-          start: 8,
-          end: 15
-        }
-        @result = @clip.send(:command_line, @options)
-      end
-
-      it "includes file name" do
-        expect(@result).to(include(@source_file))
-      end
-
-      it "has duration and start time" do
-        expect(@result).to(include("-ss 8"))
-        expect(@result).to(include("-t 7"))
       end
 
     end
 
-    context "with start, end time and duration" do
+    context "with cut options" do
 
-      it "raises" do
-        @options = {
-          duration: 5,
-          end: 15,
-          start: 10
-        }
-        expect {
-          @clip.send(:command_line, @options)
-        }.to(raise_error(RuntimeError))
+      context "with duration" do
+
+        before(:each) do
+          @options = {
+            duration: 12
+          }
+          @result = @clip.send(:command_line, @options)
+        end
+
+        it "includes file name" do
+          expect(@result).to(include(@source_file))
+        end
+
+        it "has duration" do
+          expect(@result).to_not(include("-ss"))
+          expect(@result).to(include("-t 12"))
+        end
+
+      end
+
+      context "with start time and duration" do
+
+        before(:each) do
+          @options = {
+            start: 10,
+            duration: 15
+          }
+          @result = @clip.send(:command_line, @options)
+        end
+
+        it "includes file name" do
+          expect(@result).to(include(@source_file))
+        end
+
+        it "has duration and start time" do
+          expect(@result).to(include("-ss 10"))
+          expect(@result).to(include("-t 15"))
+        end
+
+      end
+
+      context "with start and end time" do
+
+        before(:each) do
+          @options = {
+            start: 8,
+            end: 15
+          }
+          @result = @clip.send(:command_line, @options)
+        end
+
+        it "includes file name" do
+          expect(@result).to(include(@source_file))
+        end
+
+        it "has duration and start time" do
+          expect(@result).to(include("-ss 8"))
+          expect(@result).to(include("-t 7"))
+        end
+
+      end
+
+      context "with start, end time and duration" do
+
+        it "raises" do
+          @options = {
+            duration: 5,
+            end: 15,
+            start: 10
+          }
+          expect {
+            @clip.send(:command_line, @options)
+          }.to(raise_error(RuntimeError))
+        end
+
       end
 
     end
