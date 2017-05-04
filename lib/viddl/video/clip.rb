@@ -41,8 +41,9 @@ module Viddl
       # @option options [Numeric] :end Time in the source file where the clip ends
       # @return [String]
       def command_line(options = {})
-        times = options_formatted(options)
-        "ffmpeg -i #{@source_path} #{time_args(times)} -c:v copy -c:a copy #{output_path(times)}"
+        opts = options_formatted(options)
+        optional_args = " #{time_args(opts)} #{audio_args(opts)}"
+        "ffmpeg -i #{@source_path}#{optional_args} -c:v copy -c:a copy #{output_path(opts)}"
       end
 
       # Options formatted for ffmpeg
@@ -53,6 +54,7 @@ module Viddl
       # @return [Hash]
       def options_formatted(options = {})
         result = {}
+        result[:audio] = options[:audio]
         result[:start] = options[:start]
         result[:duration] = duration_from_options(options)
         result
@@ -87,6 +89,18 @@ module Viddl
         end
         unless options[:duration].nil?
           args += " -t #{options[:duration]}"
+        end
+        args
+      end
+
+      # Command line options for audio
+      # @param [Hash] options
+      # @option options [Boolean] :audio Whether to include audio (default: true)
+      # @return [Hash]
+      def audio_args(options = {})
+        args = ""
+        if options[:audio] === false
+          args += " -an"
         end
         args
       end
