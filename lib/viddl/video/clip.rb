@@ -20,6 +20,7 @@ module Viddl
       # @option options [Numeric] :end Time in the source file where the clip ends
       # @option options [Integer, String] :width The desired width to resize to
       # @option options [Integer, String] :height The desired height to resize to
+      # @option options [Hash] :crop The desired crop parameters (:x, :y, :width, :height)
       # @return [Clip]
       def self.process(path, options = {})
         clip = new(path)
@@ -40,6 +41,7 @@ module Viddl
       # @option options [Numeric] :end Time in the source file where the clip ends
       # @option options [Integer, String] :width The desired width to resize to
       # @option options [Integer, String] :height The desired height to resize to
+      # @option options [Hash] :crop The desired crop parameters (:x, :y, :width, :height)
       # @return [Boolean]
       def process(options = {})
         Kernel.system(command_line(options))
@@ -55,6 +57,7 @@ module Viddl
       # @option options [Numeric] :end Time in the source file where the clip ends
       # @option options [Integer, String] :width The desired width to resize to
       # @option options [Integer, String] :height The desired height to resize to
+      # @option options [Hash] :crop The desired crop parameters (:x, :y, :width, :height)
       # @return [String]
       def command_line(options = {})
         if options.values.compact.empty?
@@ -77,6 +80,7 @@ module Viddl
       # @option options [Numeric] :end Time in the source file where the clip ends
       # @option options [Integer, String] :width The desired width to resize to
       # @option options [Integer, String] :height The desired height to resize to
+        # @option options [Hash] :crop The desired crop parameters (:x, :y, :width, :height)
       # @return [Hash]
       def options_formatted(options = {})
         mod_options = MODULES.map { |mod| mod.options_formatted(options) }
@@ -90,6 +94,7 @@ module Viddl
       # @option options [Numeric] :duration Duration of the clip
       # @option options [Integer, String] :width The desired width to resize to
       # @option options [Integer, String] :height The desired height to resize to
+      # @option options [Hash] :crop The desired crop parameters (:x, :y, :width, :height)
       # @return [String]
       def output_path(options = {})
         base = @source_path.scan(/#{Download::TEMPDIR}\/(.*)/).flatten.first

@@ -22,6 +22,7 @@ module Viddl
       # @option options [Numeric] :end Time in the source file where the clip ends
       # @option options [Integer, String] :width The desired width to resize to
       # @option options [Integer, String] :height The desired height to resize to
+      # @option options [Hash] :crop The desired crop parameters (:x, :y, :width, :height)
       # @return [Array<Clip>]
       def create_clip(options = {})
         source_filenames.map do |filename|
