@@ -42,7 +42,7 @@ module Viddl
       # @return [String]
       def command_line(options = {})
         opts = options_formatted(options)
-        optional_args = " #{time_args(opts)} #{audio_args(opts)}"
+        optional_args = " #{cut_args(opts)} #{audio_args(opts)}"
         "ffmpeg -i #{@source_path}#{optional_args} -c:v copy -c:a copy #{output_path(opts)}"
       end
 
@@ -83,7 +83,7 @@ module Viddl
       # @option options [Numeric] :start Time in the source file where the clip starts
       # @option options [Numeric] :duration Duration of the clip
       # @return [String]
-      def time_args(options = {})
+      def cut_args(options = {})
         args = ""
         unless options[:start].nil?
           args += " -ss #{options[:start]}"

@@ -374,13 +374,13 @@ describe Viddl::Video::Clip do
 
   end
 
-  context "#time_args" do
+  context "#cut_args" do
 
     context "with no options" do
 
       it "has correct args" do
         options = {}
-        args = @clip.send(:time_args, options)
+        args = @clip.send(:cut_args, options)
         expect(args).to(eq(""))
       end
 
@@ -392,7 +392,7 @@ describe Viddl::Video::Clip do
         options = {
           start: 10
         }
-        args = @clip.send(:time_args, options)
+        args = @clip.send(:cut_args, options)
         expect(args).to(eq(" -ss 10"))
       end
 
@@ -405,7 +405,7 @@ describe Viddl::Video::Clip do
           start: 10,
           duration: 15
         }
-        args = @clip.send(:time_args, options)
+        args = @clip.send(:cut_args, options)
         expect(args).to(eq(" -ss 10 -t 15"))
       end
 
