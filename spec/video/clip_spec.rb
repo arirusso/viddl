@@ -207,10 +207,23 @@ describe Viddl::Video::Clip do
 
     end
 
+    context "with no audio" do
+
+      it "has no audio option" do
+        options = {
+          audio: false
+        }
+        path = @clip.send(:output_path, options)
+        expect(path).to(eq("6g4dkBF5anU-noaudio.mkv"))
+      end
+
+    end
+
     context "with start time" do
 
       it "matches source path file name" do
         options = {
+          audio: true,
           start: 10
         }
         path = @clip.send(:output_path, options)
@@ -223,6 +236,7 @@ describe Viddl::Video::Clip do
 
       it "matches source path file name" do
         options = {
+          audio: true,
           duration: 1.5
         }
         path = @clip.send(:output_path, options)
@@ -235,6 +249,7 @@ describe Viddl::Video::Clip do
 
       it "matches source path file name" do
         options = {
+          audio: true,
           duration: 12,
           start: 6
         }

@@ -32,7 +32,7 @@ describe Viddl::Video::Instance do
 
   end
 
-  context "#clip" do
+  context "#create_clip" do
 
     before(:each) do
       @download = Viddl::Video::Download.new(@video)
@@ -44,7 +44,7 @@ describe Viddl::Video::Instance do
       it "execs command line" do
         @options = {}
         expect(Kernel).to(receive(:system))
-        @result = @video.clip(@options)
+        @result = @video.create_clip(@options)
       end
 
     end
@@ -56,7 +56,7 @@ describe Viddl::Video::Instance do
           duration: 12
         }
         expect(Kernel).to(receive(:system))
-        @result = @video.clip(@options)
+        @result = @video.create_clip(@options)
       end
 
     end
@@ -69,7 +69,7 @@ describe Viddl::Video::Instance do
           duration: 15
         }
         expect(Kernel).to(receive(:system))
-        @result = @video.clip(@options)
+        @result = @video.create_clip(@options)
       end
 
     end
@@ -82,7 +82,7 @@ describe Viddl::Video::Instance do
           end: 15
         }
         expect(Kernel).to(receive(:system))
-        @result = @video.clip(@options)
+        @result = @video.create_clip(@options)
       end
 
     end
@@ -96,7 +96,7 @@ describe Viddl::Video::Instance do
           start: 10
         }
         expect {
-          @video.clip(@options)
+          @video.create_clip(@options)
         }.to(raise_error(RuntimeError))
       end
 
