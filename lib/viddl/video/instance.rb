@@ -19,11 +19,12 @@ module Viddl
       # @option options [Numeric] :duration Duration of the clip
       # @option options [Numeric] :end Time in the source file where the clip ends
       # @return [Array<Clip>]
-      def cut(options = {})
+      def clip(options = {})
         source_filenames.map do |filename|
           Clip.process(filename, options)
         end
       end
+      alias_method :cut, :clip
 
       # Download the video source
       # @param [Hash] options
