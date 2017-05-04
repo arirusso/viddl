@@ -4,7 +4,10 @@ module Viddl
 
     class Download
 
+      # download is stored to /tmp before processing
       TEMPDIR = "/tmp"
+      # download format is forced to mp4 to optimize for quickness
+      FORMAT_ARG = "-f 'best[ext=mp4]'"
 
       # Download the given video
       # @param [Video::Instance] video
@@ -36,7 +39,7 @@ module Viddl
       # Command line to download the video file
       # @return [String]
       def command_line
-        "youtube-dl #{@video.source_url} -o '#{TEMPDIR}/#{@video.id}s.%(ext)s'"
+        "youtube-dl #{@video.source_url} #{FORMAT_ARG} -o '#{TEMPDIR}/#{@video.id}s.%(ext)s'"
       end
 
     end
