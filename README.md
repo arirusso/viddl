@@ -38,7 +38,7 @@ viddl https://www.youtube.com/watch?v=6g4dkBF5anU -s 15 -e 22
 
 #### Resize
 
-This will resize to 640x480:
+This will resize to 640 x 480:
 
 ```sh
 viddl https://www.youtube.com/watch?v=6g4dkBF5anU -w 640 -h 480
@@ -46,7 +46,7 @@ viddl https://www.youtube.com/watch?v=6g4dkBF5anU -w 640 -h 480
 
 #### Crop
 
-This will crop a 40x40 pixel box at position 20x20:
+This will crop a 40x40 pixel box at position 20 x 20:
 
 ```sh
 viddl https://www.youtube.com/watch?v=6g4dkBF5anU -cx 20 -cy 20 -cw 40 -ch 40
@@ -62,7 +62,7 @@ viddl https://www.youtube.com/watch?v=6g4dkBF5anU --no-audio
 
 #### Combine
 
-All of these options can be used together:
+Any or all of these options can be used together:
 
 ```sh
 viddl https://www.youtube.com/watch?v=6g4dkBF5anU -s 15 -e 22 --no-audio -cx 20 -cy 20 -cw 40 -ch 40 -w 640 -h 480
@@ -87,7 +87,7 @@ options = {
   height: 480
 }
 
-video = Viddl::Video.download("https://www.youtube.com/watch?v=6g4dkBF5anU"
+video = Viddl::Video.download("https://www.youtube.com/watch?v=6g4dkBF5anU")
 video.create_clip(options)
 ```
 
