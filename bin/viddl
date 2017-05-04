@@ -6,7 +6,9 @@ require "viddl"
 
 options = {}
 OptionParser.new do |opts|
-  opts.banner = "Usage: example.rb [options]"
+  opts.banner = "Usage: viddl [options]"
+
+  ## cut
 
   opts.on("-dDURATION", "--duration=DURATION", "Duration") do |duration|
     options[:duration] = duration.to_f
@@ -19,9 +21,28 @@ OptionParser.new do |opts|
   opts.on("-sSTART", "--start=START", "Start time") do |start|
     options[:start] = start.to_f
   end
+
+  # resize
+
+  opts.on("-wWIDTH", "--width=WIDTH", "Width") do |width|
+    options[:width] = width.to_i
+  end
+
+  opts.on("-hHEIGHT", "--height=HEIGHT", "Height") do |height|
+    options[:height] = height.to_i
+  end
+
+  # crop
+
+  # audio
+
+  opts.on("--no-audio", "No audio") do
+    options[:audio] = false
+  end
+
 end.parse!
 
 url = ARGV[0]
 
-video = Viddl.download(url)
-video.cut(start: options[:start], duration: options[:duration], end: options[:end])
+video = Viddl::Video.download(url)
+video.create_clip(options)
