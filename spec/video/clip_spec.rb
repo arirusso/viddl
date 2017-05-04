@@ -325,90 +325,12 @@ describe Viddl::Video::Clip do
 
   context "#options_formatted" do
 
-    context "audio options" do
-
-      context "with no options" do
-
-        it "has audio = true" do
-          options = {}
-          args = @clip.send(:options_formatted, options)
-          expect(args[:audio]).to(be true)
-        end
-
-      end
-
-      context "with audio = false" do
-
-        it "has audio = false" do
-          options = {
-            audio: false
-          }
-          args = @clip.send(:options_formatted, options)
-          expect(args[:audio]).to(be false)
-        end
-
-      end
-
-    end
-
-    context "with cut options" do
-
-      context "with duration" do
-
-        it "has duration" do
-          options = {
-            duration: 12
-          }
-          args = @clip.send(:options_formatted, options)
-          expect(args[:start]).to(be_nil)
-          expect(args[:duration]).to(eq(12))
-        end
-
-      end
-
-      context "with start time and duration" do
-
-        it "has duration and start time" do
-          options = {
-            start: 10,
-            duration: 15
-          }
-          args = @clip.send(:options_formatted, options)
-          expect(args[:start]).to(eq(10))
-          expect(args[:duration]).to(eq(15))
-        end
-
-      end
-
-      context "with start and end time" do
-
-        it "has duration and start time" do
-          options = {
-            start: 8,
-            end: 15
-          }
-          args = @clip.send(:options_formatted, options)
-          expect(args[:start]).to(eq(8))
-          expect(args[:duration]).to(eq(7))
-        end
-
-      end
-
-      context "with start, end time and duration" do
-
-        it "raises" do
-          options = {
-            duration: 5,
-            end: 15,
-            start: 10
-          }
-          expect {
-            @clip.send(:options_formatted, options)
-          }.to(raise_error(RuntimeError))
-        end
-
-      end
-
+    it "formats options for each module" do
+      options = {}
+      expect(Viddl::Video::Clip::Audio).to(receive(:options_formatted).and_return({}))
+      expect(Viddl::Video::Clip::Cut).to(receive(:options_formatted).and_return({}))
+      expect(Viddl::Video::Clip::Resize).to(receive(:options_formatted).and_return({}))
+      @clip.send(:options_formatted, options)
     end
 
   end
