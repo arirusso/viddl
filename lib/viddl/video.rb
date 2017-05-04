@@ -14,7 +14,7 @@ module Viddl
     # @return [Video::Instance]
     def download(url, options = {})
       video = Instance.new(url)
-      video.download(options)
+      video.process_download(options)
       video
     end
 

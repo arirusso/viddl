@@ -19,6 +19,7 @@ module Viddl
       # @param [Video::Instance] video
       def initialize(video)
         @video = video
+        @video.download = self if @video.download.nil?
       end
 
       # Download the video file

@@ -4,6 +4,7 @@ module Viddl
 
     class Instance
 
+      attr_accessor :download
       attr_reader :id, :source_url
 
       # @param [String] url The url of the video source
@@ -29,7 +30,7 @@ module Viddl
       # Download the video source
       # @param [Hash] options
       # @return [Download]
-      def download(options = {})
+      def process_download(options = {})
         @download = Download.process(self, options)
       end
 
