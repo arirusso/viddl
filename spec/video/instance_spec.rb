@@ -8,11 +8,35 @@ describe Viddl::Video::Instance do
     @video = Viddl::Video::Instance.new(@source_url)
   end
 
+  context "#source_filenames" do
+
+    context "with associated download" do
+
+      it "pulls filenames from directory" do
+        @video.instance_variable_set("@download", Object.new)
+        expect(Dir).to(receive(:[]))
+        @result = @video.source_filenames
+      end
+
+    end
+
+    context "with no associated download" do
+
+      it "raises" do
+        expect {
+          @video.source_filenames
+        }.to(raise_error(RuntimeError))
+      end
+
+    end
+
+  end
+
   context "#clip" do
 
     before(:each) do
       @video.instance_variable_set("@download", Object.new)
-      @video.stub(:source_filenames).and_return(["/tmp/#{@video_id}.mkv"])
+      expect(@video).to(receive(:source_filenames).and_return(["/tmp/#{@video_id}.mkv"]))
     end
 
     context "with no options" do
