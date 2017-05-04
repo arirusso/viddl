@@ -1,5 +1,7 @@
 # Viddl
 
+![Viddl](http://i.imgur.com/OuHviqv.png "Viddl")
+
 Use Viddl to quickly download, cut, crop and resize videos
 
 Viddl can be used at the [command line](#command-line) or in [Ruby](#ruby)
