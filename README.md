@@ -48,7 +48,7 @@ viddl https://www.youtube.com/watch?v=6g4dkBF5anU -w 640 -h 480
 
 #### Crop
 
-This will crop a 40x40 pixel box at position 20 x 20:
+This will crop a 40 x 40 pixel box at position 20 x 20:
 
 ```sh
 viddl https://www.youtube.com/watch?v=6g4dkBF5anU --cx 20 --cy 20 --cw 40 --ch 40
