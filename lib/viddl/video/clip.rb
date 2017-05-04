@@ -116,14 +116,20 @@ module Viddl
         result = base
         if !options.values.flatten.compact.empty?
           name, ext = *base.split(".")
-          time_string = ""
+          option_string = ""
           unless options[:start].nil?
-            time_string += "s#{options[:start]}"
+            option_string += "s#{options[:start]}"
           end
           unless options[:duration].nil?
-            time_string += "d#{options[:duration]}"
+            option_string += "d#{options[:duration]}"
           end
-          result = "#{name}-#{time_string}.#{ext}"
+          if !option_string.empty?
+            option_string = "-#{option_string}"
+          end
+          unless options[:audio]
+            option_string += "-noaudio"
+          end
+          result = "#{name}#{option_string}.#{ext}"
         end
         result
       end
