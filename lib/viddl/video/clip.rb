@@ -44,7 +44,8 @@ module Viddl
       # @option options [Hash] :crop The desired crop parameters (:x, :y, :width, :height)
       # @return [Boolean]
       def process(options = {})
-        Kernel.system(command_line(options))
+        command = command_line(options)
+        Kernel.system(command)
       end
 
       private
@@ -66,8 +67,18 @@ module Viddl
           "cp #{@source_path} #{output_path}"
         else
           formatted_opts = options_formatted(options)
-          module_args = MODULES.map { |mod| mod.args(formatted_opts) }
-          module_arg_string = module_args.compact.reject(&:empty?).join(" ")
+
+          modules_with_args = MODULES.select { |mod| mod.respond_to?(:args) }
+          modules_with_filters = MODULES.select { |mod| mod.respond_to?(:filter_args) }
+
+          module_args = modules_with_args.map { |mod| mod.args(formatted_opts) }.compact
+          module_filters = modules_with_filters.map { |mod| mod.filter_args(formatted_opts) }.compact
+
+          module_arg_string = module_args.join(" ")
+          unless module_filters.empty?
+            module_arg_string += " -vf '#{module_filters.join(",")}'"
+          end
+
           "ffmpeg -i #{@source_path} #{module_arg_string} #{output_path(formatted_opts)}"
         end
       end
@@ -104,7 +115,7 @@ module Viddl
           tokens = ""
           MODULES.each do |mod|
             token = mod.filename_token(options)
-            tokens += "-#{token}" unless token.empty?
+            tokens += "-#{token}" unless token.nil?
           end
           result = "#{name}#{tokens}.#{ext}"
         end

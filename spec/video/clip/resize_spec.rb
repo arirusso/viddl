@@ -82,14 +82,14 @@ describe Viddl::Video::Clip::Resize do
 
   end
 
-  context ".args" do
+  context ".filter_args" do
 
     context "with no options" do
 
       it "returns blank string" do
         options = {}
-        args = Viddl::Video::Clip::Resize.send(:args, options)
-        expect(args).to(be_empty)
+        args = Viddl::Video::Clip::Resize.send(:filter_args, options)
+        expect(args).to(be_nil)
       end
 
     end
@@ -100,8 +100,8 @@ describe Viddl::Video::Clip::Resize do
         options = {
           width: 1024
         }
-        args = Viddl::Video::Clip::Resize.send(:args, options)
-        expect(args).to(eq("-vf scale=1024:-1"))
+        args = Viddl::Video::Clip::Resize.send(:filter_args, options)
+        expect(args).to(eq("scale=1024:-1"))
       end
 
     end
@@ -112,8 +112,8 @@ describe Viddl::Video::Clip::Resize do
         options = {
           height: 768
         }
-        args = Viddl::Video::Clip::Resize.send(:args, options)
-        expect(args).to(eq("-vf scale=-1:768"))
+        args = Viddl::Video::Clip::Resize.send(:filter_args, options)
+        expect(args).to(eq("scale=-1:768"))
       end
 
     end
@@ -125,8 +125,8 @@ describe Viddl::Video::Clip::Resize do
           width: 1280,
           height: 720
         }
-        args = Viddl::Video::Clip::Resize.send(:args, options)
-        expect(args).to(eq("-vf scale=1280:720"))
+        args = Viddl::Video::Clip::Resize.send(:filter_args, options)
+        expect(args).to(eq("scale=1280:720"))
       end
 
     end

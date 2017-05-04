@@ -79,14 +79,14 @@ describe Viddl::Video::Clip::Crop do
 
   end
 
-  context ".args" do
+  context ".filter_args" do
 
     context "with no options" do
 
       it "returns blank string" do
         options = {}
-        args = Viddl::Video::Clip::Crop.send(:args, options)
-        expect(args).to(be_empty)
+        args = Viddl::Video::Clip::Crop.send(:filter_args, options)
+        expect(args).to(be_nil)
       end
 
     end
@@ -102,8 +102,8 @@ describe Viddl::Video::Clip::Crop do
             height: 50
           }
         }
-        args = Viddl::Video::Clip::Crop.send(:args, options)
-        expect(args).to(eq("-filter:v 'crop=20:30:40:50'"))
+        args = Viddl::Video::Clip::Crop.send(:filter_args, options)
+        expect(args).to(eq("crop=40:50:20:30"))
       end
 
     end

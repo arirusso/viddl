@@ -47,7 +47,7 @@ describe Viddl::Video::Clip::Audio do
       it "return blank string" do
         options = {}
         args = Viddl::Video::Clip::Audio.send(:args, options)
-        expect(args).to(be_empty)
+        expect(args).to(be_nil)
       end
 
     end
@@ -71,7 +71,7 @@ describe Viddl::Video::Clip::Audio do
           audio: true
         }
         args = Viddl::Video::Clip::Audio.send(:args, options)
-        expect(args).to(be_empty)
+        expect(args).to(be_nil)
       end
 
     end

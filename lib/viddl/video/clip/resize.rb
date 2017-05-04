@@ -25,8 +25,8 @@ module Viddl
         # @param [Hash] options
         # @option options [Integer] :width The desired width to resize to
         # @option options [Integer] :height The desired height to resize to
-        # @return [String]
-        def args(options = {})
+        # @return [String, nil]
+        def filter_args(options = {})
           scale = if options[:width].nil? && !options[:height].nil?
             "-1:#{options[:height]}"
           elsif !options[:width].nil? && options[:height].nil?
@@ -34,10 +34,8 @@ module Viddl
           elsif !options[:width].nil? && !options[:height].nil?
             "#{options[:width]}:#{options[:height]}"
           end
-          if scale.nil?
-            ""
-          else
-            "-vf scale=#{scale}"
+          unless scale.nil?
+            "scale=#{scale}"
           end
         end
 
@@ -45,16 +43,18 @@ module Viddl
         # @param [Hash] options
         # @option options [Integer] :width The desired width to resize to
         # @option options [Integer] :height The desired height to resize to
-        # @return [String]
+        # @return [String, nil]
         def filename_token(options = {})
-          args = ""
-          unless options[:width].nil?
-            args += "w#{options[:width]}"
+          if !options[:width].nil? || !options[:height].nil?
+            args = ""
+            if !options[:width].nil?
+              args += "w#{options[:width]}"
+            end
+            if !options[:height].nil?
+              args += "h#{options[:height]}"
+            end
+            args
           end
-          unless options[:height].nil?
-            args += "h#{options[:height]}"
-          end
-          args
         end
 
       end

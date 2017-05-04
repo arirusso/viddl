@@ -158,7 +158,7 @@ describe Viddl::Video::Clip::Cut do
       it "returns nil" do
         options = {}
         args = Viddl::Video::Clip::Cut.send(:duration, options)
-        expect(args).to(eq(nil))
+        expect(args).to(be_nil)
       end
 
     end
@@ -208,10 +208,10 @@ describe Viddl::Video::Clip::Cut do
 
     context "with no options" do
 
-      it "has correct args" do
+      it "return nil" do
         options = {}
         args = Viddl::Video::Clip::Cut.send(:args, options)
-        expect(args).to(eq(""))
+        expect(args).to(be_nil)
       end
 
     end

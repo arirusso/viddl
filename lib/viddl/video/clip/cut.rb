@@ -25,7 +25,7 @@ module Viddl
         # @param [Hash] options
         # @option options [Numeric] :start Time in the source file where the clip starts
         # @option options [Numeric] :duration Duration of the clip
-        # @return [String]
+        # @return [String, nil]
         def args(options = {})
           args = []
           unless options[:start].nil?
@@ -34,23 +34,25 @@ module Viddl
           unless options[:duration].nil?
             args << "-t #{options[:duration]}"
           end
-          args.join(" ")
+          args.join(" ") unless args.empty?
         end
 
         # Token added to clip filename for cut args
         # @param [Hash] options
         # @option options [Numeric] :start Time in the source file where the clip starts
         # @option options [Numeric] :duration Duration of the clip
-        # @return [String]
+        # @return [String, nil]
         def filename_token(options = {})
-          args = ""
-          unless options[:start].nil?
-            args += "s#{options[:start]}"
+          if !options[:start].nil? || !options[:duration].nil?
+            args = ""
+            if !options[:start].nil?
+              args += "s#{options[:start]}"
+            end
+            if !options[:duration].nil?
+              args += "d#{options[:duration]}"
+            end
+            args
           end
-          unless options[:duration].nil?
-            args += "d#{options[:duration]}"
-          end
-          args
         end
 
         private

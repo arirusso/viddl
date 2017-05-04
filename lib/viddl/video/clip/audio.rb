@@ -21,17 +21,17 @@ module Viddl
         # Command line options for audio
         # @param [Hash] options
         # @option options [Boolean] :audio Whether to include audio (default: false)
-        # @return [String]
+        # @return [String, nil]
         def args(options = {})
-          options[:audio].eql?(false) ? "-an" : ""
+          "-an" if options[:audio].eql?(false)
         end
 
         # Token added to clip filename for audio args
         # @param [Hash] options
         # @option options [Boolean] :audio Whether to include audio in the clip (default: false)
-        # @return [String]
+        # @return [String, nil]
         def filename_token(options = {})
-          options[:audio].eql?(false) ? "noaudio" : ""
+          "noaudio" if options[:audio].eql?(false)
         end
 
       end

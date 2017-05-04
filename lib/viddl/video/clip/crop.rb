@@ -32,23 +32,19 @@ module Viddl
         # @param [Hash] options
         # @option options [Hash] :crop The desired crop parameters (:x, :y, :width, :height)
         # @return [String]
-        def args(options = {})
-          if options[:crop].nil?
-            ""
-          else
+        def filter_args(options = {})
+          unless options[:crop].nil?
             crop = options[:crop]
-            "-filter:v 'crop=#{crop[:x]}:#{crop[:y]}:#{crop[:width]}:#{crop[:height]}'"
+            "crop=#{crop[:width]}:#{crop[:height]}:#{crop[:x]}:#{crop[:y]}"
           end
         end
 
         # Token added to clip filename for crop args
         # @param [Hash] options
         # @option options [Hash] :crop The desired crop parameters (:x, :y, :width, :height)
-        # @return [String]
+        # @return [String, nil]
         def filename_token(options = {})
-          if options[:crop].nil?
-            ""
-          else
+          unless options[:crop].nil?
             crop = options[:crop]
             "cx#{crop[:x]}cy#{crop[:y]}cw#{crop[:width]}ch#{crop[:height]}"
           end

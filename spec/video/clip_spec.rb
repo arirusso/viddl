@@ -153,7 +153,8 @@ describe Viddl::Video::Clip do
         end
 
         it "has correct scale arg" do
-          expect(@result).to(include("-filter:v 'crop=150:160:170:180'"))
+          expect(@result).to(include("-vf"))
+          expect(@result).to(include("crop=170:180:150:160"))
         end
 
       end
@@ -172,7 +173,8 @@ describe Viddl::Video::Clip do
         end
 
         it "has correct scale arg" do
-          expect(@result).to(include("-vf scale=1024:-1"))
+          expect(@result).to(include("-vf"))
+          expect(@result).to(include("scale=1024:-1"))
         end
 
       end
@@ -187,7 +189,8 @@ describe Viddl::Video::Clip do
         end
 
         it "has correct scale arg" do
-          expect(@result).to(include("-vf scale=-1:768"))
+          expect(@result).to(include("-vf"))
+          expect(@result).to(include("scale=-1:768"))
         end
 
       end
@@ -203,7 +206,8 @@ describe Viddl::Video::Clip do
         end
 
         it "has correct scale arg" do
-          expect(@result).to(include("-vf scale=1920:1280"))
+          expect(@result).to(include("-vf"))
+          expect(@result).to(include("scale=1920:1280"))
         end
 
       end
