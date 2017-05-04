@@ -92,6 +92,29 @@ describe Viddl::Video::Clip do
         expect(@result).to_not(include("-t"))
       end
 
+      it "has no audio off option" do
+        expect(@result).to_not(include("-an"))
+      end
+
+    end
+
+    context "with audio = false" do
+
+      before(:each) do
+        @options = {
+          audio: false
+        }
+        @result = @clip.send(:command_line, @options)
+      end
+
+      it "includes file name" do
+        expect(@result).to(include(@source_file))
+      end
+
+      it "has duration" do
+        expect(@result).to(include("-an"))
+      end
+
     end
 
     context "with duration" do

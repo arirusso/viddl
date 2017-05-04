@@ -7,7 +7,7 @@ describe Viddl::Video do
     @source_url = "https://youtube.com/watch?v=#{@video_id}"
   end
 
-  context ".download" do
+  context ".process" do
 
     context "with no options" do
 
