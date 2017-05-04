@@ -2,7 +2,7 @@
 
 Use Viddl to quickly download, cut, crop and resize videos
 
-Viddl can be used in Ruby or at the command line
+Viddl can be used in [Ruby](#ruby) or [at the command line](#command-line)
 
 It requires that both [youtube-dl](https://github.com/rg3/youtube-dl) and [ffmpeg](https://ffmpeg.org) are installed before using.
 
