@@ -1,3 +1,4 @@
+require "viddl/video/clip/audio"
 require "viddl/video/clip/cut"
 
 module Viddl
@@ -44,7 +45,7 @@ module Viddl
       # @return [String]
       def command_line(options = {})
         opts = options_formatted(options)
-        optional_args = " #{Cut.args(opts)} #{audio_args(opts)}"
+        optional_args = " #{Cut.args(opts)} #{Audio.args(opts)}"
         "ffmpeg -i #{@source_path}#{optional_args} -c:v copy -c:a copy #{output_path(opts)}"
       end
 
@@ -63,18 +64,6 @@ module Viddl
         result
       end
 
-      # Command line options for audio
-      # @param [Hash] options
-      # @option options [Boolean] :audio Whether to include audio (default: true)
-      # @return [Hash]
-      def audio_args(options = {})
-        args = ""
-        unless options[:audio]
-          args += " -an"
-        end
-        args
-      end
-
       # Path of the created clip
       # @param [Hash] options
       # @option options [Numeric] :start Time in the source file where the clip starts
@@ -90,9 +79,7 @@ module Viddl
           if !option_string.empty?
             option_string = "-#{option_string}"
           end
-          unless options[:audio]
-            option_string += "-noaudio"
-          end
+          option_string += Audio.filename_token(options)
           result = "#{name}#{option_string}.#{ext}"
         end
         result
