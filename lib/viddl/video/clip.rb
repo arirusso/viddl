@@ -63,7 +63,6 @@ module Viddl
           "cp #{@source_path} #{output_path}"
         else
           formatted_opts = options_formatted(options)
-          module_args = ""
           module_args = MODULES.map { |mod| mod.args(formatted_opts) }
           module_arg_string = module_args.compact.reject(&:empty?).join(" ")
           "ffmpeg -i #{@source_path} #{module_arg_string} -c:v copy -c:a copy #{output_path(formatted_opts)}"
@@ -80,10 +79,8 @@ module Viddl
       # @option options [Integer, String] :height The desired height to resize to
       # @return [Hash]
       def options_formatted(options = {})
-        result = {}
-        result.merge!(Audio.options_formatted(options))
-        result.merge!(Cut.options_formatted(options))
-        result
+        mod_options = MODULES.map { |mod| mod.options_formatted(options) }
+        mod_options.inject(:merge)
       end
 
       # Path of the created clip
