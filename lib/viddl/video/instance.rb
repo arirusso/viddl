@@ -16,9 +16,12 @@ module Viddl
 
       # Cut the video source using the given options
       # @param [Hash] options
+      # @option options [Boolean] :audio Whether to include audio
       # @option options [Numeric] :start Time in the source file where the clip starts
       # @option options [Numeric] :duration Duration of the clip
       # @option options [Numeric] :end Time in the source file where the clip ends
+      # @option options [Integer, String] :width The desired width to resize to
+      # @option options [Integer, String] :height The desired height to resize to
       # @return [Array<Clip>]
       def create_clip(options = {})
         source_filenames.map do |filename|

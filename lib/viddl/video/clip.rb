@@ -14,9 +14,12 @@ module Viddl
       # Create a clip using the given video source file path and options
       # @param [String] source_path Path to video file to create clip from
       # @param [Hash] options
+      # @option options [Boolean] :audio Whether to include audio
       # @option options [Numeric] :start Time in the source file where the clip starts
       # @option options [Numeric] :duration Duration of the clip
       # @option options [Numeric] :end Time in the source file where the clip ends
+      # @option options [Integer, String] :width The desired width to resize to
+      # @option options [Integer, String] :height The desired height to resize to
       # @return [Clip]
       def self.process(path, options = {})
         clip = new(path)
@@ -31,9 +34,12 @@ module Viddl
 
       # Create a clip using the given options
       # @param [Hash] options
+      # @option options [Boolean] :audio Whether to include audio
       # @option options [Numeric] :start Time in the source file where the clip starts
       # @option options [Numeric] :duration Duration of the clip
       # @option options [Numeric] :end Time in the source file where the clip ends
+      # @option options [Integer, String] :width The desired width to resize to
+      # @option options [Integer, String] :height The desired height to resize to
       # @return [Boolean]
       def process(options = {})
         Kernel.system(command_line(options))
@@ -43,9 +49,12 @@ module Viddl
 
       # Command line to create a clip from the source file and given options
       # @param [Hash] options
+      # @option options [Boolean] :audio Whether to include audio
       # @option options [Numeric] :start Time in the source file where the clip starts
       # @option options [Numeric] :duration Duration of the clip
       # @option options [Numeric] :end Time in the source file where the clip ends
+      # @option options [Integer, String] :width The desired width to resize to
+      # @option options [Integer, String] :height The desired height to resize to
       # @return [String]
       def command_line(options = {})
         if options.values.compact.empty?
@@ -67,6 +76,8 @@ module Viddl
       # @option options [Numeric] :start Time in the source file where the clip starts
       # @option options [Numeric] :duration Duration of the clip
       # @option options [Numeric] :end Time in the source file where the clip ends
+      # @option options [Integer, String] :width The desired width to resize to
+      # @option options [Integer, String] :height The desired height to resize to
       # @return [Hash]
       def options_formatted(options = {})
         result = {}
@@ -77,8 +88,11 @@ module Viddl
 
       # Path of the created clip
       # @param [Hash] options
+      # @option options [Boolean] :audio Whether to include audio
       # @option options [Numeric] :start Time in the source file where the clip starts
       # @option options [Numeric] :duration Duration of the clip
+      # @option options [Integer, String] :width The desired width to resize to
+      # @option options [Integer, String] :height The desired height to resize to
       # @return [String]
       def output_path(options = {})
         base = @source_path.scan(/#{Download::TEMPDIR}\/(.*)/).flatten.first
