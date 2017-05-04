@@ -1,3 +1,5 @@
+require "viddl/video/clip/cut"
+
 module Viddl
 
   module Video
@@ -42,7 +44,7 @@ module Viddl
       # @return [String]
       def command_line(options = {})
         opts = options_formatted(options)
-        optional_args = " #{cut_args(opts)} #{audio_args(opts)}"
+        optional_args = " #{Cut.args(opts)} #{audio_args(opts)}"
         "ffmpeg -i #{@source_path}#{optional_args} -c:v copy -c:a copy #{output_path(opts)}"
       end
 
@@ -57,41 +59,8 @@ module Viddl
         result = {}
         result[:audio] = true unless options[:audio] === false
         result[:start] = options[:start]
-        result[:duration] = duration_from_options(options)
+        result[:duration] = Cut.duration(options)
         result
-      end
-
-      # Numeric duration for the given options
-      # @param [Hash] options
-      # @option options [Numeric] :duration Duration of the clip
-      # @option options [Numeric] :end Time in the source file where the clip ends
-      # @return [Numeric]
-      def duration_from_options(options = {})
-        duration = nil
-        if !options[:duration].nil? && !options[:end].nil?
-          raise "Can not use both end time and duration"
-        elsif !options[:duration].nil? && options[:end].nil?
-          duration = options[:duration]
-        elsif options[:duration].nil? && !options[:end].nil?
-          duration = options[:end] - options[:start]
-        end
-        duration
-      end
-
-      # Command line options for the given time constraints
-      # @param [Hash] options
-      # @option options [Numeric] :start Time in the source file where the clip starts
-      # @option options [Numeric] :duration Duration of the clip
-      # @return [String]
-      def cut_args(options = {})
-        args = ""
-        unless options[:start].nil?
-          args += " -ss #{options[:start]}"
-        end
-        unless options[:duration].nil?
-          args += " -t #{options[:duration]}"
-        end
-        args
       end
 
       # Command line options for audio
@@ -117,12 +86,7 @@ module Viddl
         if !options.values.flatten.compact.empty?
           name, ext = *base.split(".")
           option_string = ""
-          unless options[:start].nil?
-            option_string += "s#{options[:start]}"
-          end
-          unless options[:duration].nil?
-            option_string += "d#{options[:duration]}"
-          end
+          option_string += Cut.filename_token(options)
           if !option_string.empty?
             option_string = "-#{option_string}"
           end
