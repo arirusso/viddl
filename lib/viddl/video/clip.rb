@@ -9,7 +9,7 @@ module Viddl
 
     class Clip
 
-      MODULES = [Audio, Cut, Resize]
+      MODULES = [Audio, Crop, Cut, Resize]
 
       # Create a clip using the given video source file path and options
       # @param [String] source_path Path to video file to create clip from

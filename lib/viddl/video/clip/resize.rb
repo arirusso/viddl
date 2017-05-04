@@ -15,8 +15,9 @@ module Viddl
         # @return [Hash]
         def options_formatted(options = {})
           result = {}
-          result[:height] = options[:height].to_i unless options[:height].nil?
-          result[:width] = options[:width].to_i unless options[:width].nil?
+          [:width, :height].each do |property|
+            result[property] = options[property].to_i unless options[property].nil?
+          end
           result
         end
 
