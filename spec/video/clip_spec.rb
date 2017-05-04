@@ -121,6 +121,45 @@ describe Viddl::Video::Clip do
 
     end
 
+    context "with crop options" do
+
+      context "incomplete" do
+
+        it "raises" do
+          @options = {
+            crop: {
+              x: 1
+            }
+          }
+          expect {
+            @clip.send(:command_line, @options)
+          }.to(raise_error(RuntimeError))
+        end
+
+      end
+
+      context "valid" do
+
+        before(:each) do
+          @options = {
+            crop: {
+              x: 150,
+              y: 160,
+              width: 170,
+              height: 180
+            }
+          }
+          @result = @clip.send(:command_line, @options)
+        end
+
+        it "has correct scale arg" do
+          expect(@result).to(include("-filter:v 'crop=150:160:170:180'"))
+        end
+
+      end
+
+    end
+
     context "with resize options" do
 
       context "with width only" do
@@ -261,6 +300,27 @@ describe Viddl::Video::Clip do
       it "matches source path file name" do
         path = @clip.send(:output_path)
         expect(path).to(eq("6g4dkBF5anU.mkv"))
+      end
+
+    end
+
+    context "crop options" do
+
+      context "valid" do
+
+        it "has crop options in filename" do
+          options = {
+            crop: {
+              x: 200,
+              y: 210,
+              width: 220,
+              height: 230
+            }
+          }
+          path = @clip.send(:output_path, options)
+          expect(path).to(eq("6g4dkBF5anU-cx200cy210cw220ch230.mkv"))
+        end
+
       end
 
     end
