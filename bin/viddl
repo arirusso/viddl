@@ -4,8 +4,13 @@ $LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 require "optparse"
 require "viddl"
 
+def help(opts)
+  puts(opts)
+  exit
+end
+
 options = {}
-OptionParser.new do |opts|
+opts = OptionParser.new do |opts|
   opts.banner = "Usage: viddl [url] [options]"
 
   ## cut
@@ -60,9 +65,16 @@ OptionParser.new do |opts|
     options[:audio] = false
   end
 
-end.parse!
+  opts.on_tail("--help", "Show this message") { help(opts) }
+
+end
+opts.parse!
 
 url = ARGV[0]
-p options
+
+if url.nil?
+  help(opts) and exit
+end
+
 video = Viddl::Video.download(url)
 video.create_clip(options)
