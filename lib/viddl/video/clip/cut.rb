@@ -8,21 +8,17 @@ module Viddl
 
         extend self
 
-        # Numeric duration for the given options
+        # Cut options formatted for ffmpeg
         # @param [Hash] options
+        # @option options [Numeric] :start Time in the source file where the clip starts
         # @option options [Numeric] :duration Duration of the clip
         # @option options [Numeric] :end Time in the source file where the clip ends
-        # @return [Numeric]
-        def duration(options = {})
-          duration = nil
-          if !options[:duration].nil? && !options[:end].nil?
-            raise "Can not use both end time and duration"
-          elsif !options[:duration].nil? && options[:end].nil?
-            duration = options[:duration]
-          elsif options[:duration].nil? && !options[:end].nil?
-            duration = options[:end] - options[:start]
-          end
-          duration
+        # @return [Hash]
+        def options_formatted(options = {})
+          result = {}
+          result[:start] = options[:start]
+          result[:duration] = duration(options)
+          result
         end
 
         # Command line options for the given cut constraints
@@ -55,6 +51,25 @@ module Viddl
             args += "d#{options[:duration]}"
           end
           args
+        end
+
+        private
+
+        # Numeric duration for the given options
+        # @param [Hash] options
+        # @option options [Numeric] :duration Duration of the clip
+        # @option options [Numeric] :end Time in the source file where the clip ends
+        # @return [Numeric]
+        def duration(options = {})
+          duration = nil
+          if !options[:duration].nil? && !options[:end].nil?
+            raise "Can not use both end time and duration"
+          elsif !options[:duration].nil? && options[:end].nil?
+            duration = options[:duration]
+          elsif options[:duration].nil? && !options[:end].nil?
+            duration = options[:end] - (options[:start] || 0)
+          end
+          duration
         end
 
       end

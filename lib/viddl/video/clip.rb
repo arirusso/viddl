@@ -58,9 +58,8 @@ module Viddl
       # @return [Hash]
       def options_formatted(options = {})
         result = {}
-        result[:audio] = true unless options[:audio] === false
-        result[:start] = options[:start]
-        result[:duration] = Cut.duration(options)
+        result.merge!(Audio.options_formatted(options))
+        result.merge!(Cut.options_formatted(options))
         result
       end
 
