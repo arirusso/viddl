@@ -48,13 +48,14 @@ module Viddl
 
       # Options formatted for ffmpeg
       # @param [Hash] options
+      # @option options [Boolean] :audio Whether to include audio (default: true)
       # @option options [Numeric] :start Time in the source file where the clip starts
       # @option options [Numeric] :duration Duration of the clip
       # @option options [Numeric] :end Time in the source file where the clip ends
       # @return [Hash]
       def options_formatted(options = {})
         result = {}
-        result[:audio] = options[:audio]
+        result[:audio] = true unless options[:audio] === false
         result[:start] = options[:start]
         result[:duration] = duration_from_options(options)
         result
@@ -99,7 +100,7 @@ module Viddl
       # @return [Hash]
       def audio_args(options = {})
         args = ""
-        if options[:audio] === false
+        unless options[:audio]
           args += " -an"
         end
         args
