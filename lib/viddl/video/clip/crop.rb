@@ -46,14 +46,12 @@ module Viddl
         # @option options [Hash] :crop The desired crop parameters (:x, :y, :width, :height)
         # @return [String]
         def filename_token(options = {})
-          args = ""
           if options[:crop].nil?
             ""
           else
             crop = options[:crop]
-            "cx#{crop[:x]}cy#{crop[:y]}cw#{crop[:width]}ch#{crop[:height]}'"
+            "cx#{crop[:x]}cy#{crop[:y]}cw#{crop[:width]}ch#{crop[:height]}"
           end
-          args
         end
 
       end
