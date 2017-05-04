@@ -23,11 +23,7 @@ module Viddl
         # @option options [Boolean] :audio Whether to include audio (default: false)
         # @return [String]
         def args(options = {})
-          args = ""
-          unless options[:audio]
-            args += "-an"
-          end
-          args
+          options[:audio].eql?(false) ? "-an" : ""
         end
 
         # Token added to clip filename for audio args
@@ -35,7 +31,7 @@ module Viddl
         # @option options [Boolean] :audio Whether to include audio in the clip (default: false)
         # @return [String]
         def filename_token(options = {})
-          options[:audio] ? "" : "noaudio"
+          options[:audio].eql?(false) ? "noaudio" : ""
         end
 
       end

@@ -44,10 +44,10 @@ describe Viddl::Video::Clip::Audio do
 
     context "with no options" do
 
-      it "turns off audio" do
+      it "return blank string" do
         options = {}
         args = Viddl::Video::Clip::Audio.send(:args, options)
-        expect(args).to(eq("-an"))
+        expect(args).to(be_empty)
       end
 
     end
