@@ -16,13 +16,4 @@ module Viddl
 
   VERSION = "0.0.1"
 
-  # Download a video using the given url
-  # @param [String] url
-  # @param [Hash] options
-  # @return [Video::Instance]
-  def download(url, options = {})
-    System.validate
-    Video.download(url, options)
-  end
-
 end
