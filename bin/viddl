@@ -6,7 +6,7 @@ require "viddl"
 
 options = {}
 OptionParser.new do |opts|
-  opts.banner = "Usage: viddl [options]"
+  opts.banner = "Usage: viddl [url] [options]"
 
   ## cut
 
@@ -34,6 +34,26 @@ OptionParser.new do |opts|
 
   # crop
 
+  opts.on("--cx=CX", "Crop X") do |cx|
+    options[:crop] ||= {}
+    options[:crop][:x] = cx.to_i
+  end
+
+  opts.on("--cy=CY", "Crop Y") do |cy|
+    options[:crop] ||= {}
+    options[:crop][:y] = cy.to_i
+  end
+
+  opts.on("--cw=CWIDTH", "Crop Width") do |cwidth|
+    options[:crop] ||= {}
+    options[:crop][:width] = cwidth.to_i
+  end
+
+  opts.on("--ch=CHEIGHT", "Crop Height") do |cheight|
+    options[:crop] ||= {}
+    options[:crop][:height] = cheight.to_i
+  end
+
   # audio
 
   opts.on("--no-audio", "No audio") do
@@ -43,6 +63,6 @@ OptionParser.new do |opts|
 end.parse!
 
 url = ARGV[0]
-
+p options
 video = Viddl::Video.download(url)
 video.create_clip(options)

@@ -21,6 +21,10 @@ video = Viddl::Video.download("https://www.youtube.com/watch?v=6g4dkBF5anU")
 # comparable to command line `viddl https://www.youtube.com/watch?v=6g4dkBF5anU -w 320 -h 240`
 # video.create_clip(width: 320, height: 240)
 
+# Uncomment for crop
+# comparable to command line `viddl https://www.youtube.com/watch?v=6g4dkBF5anU --cx 100 --cy 100 --cw 60 --ch 60`
+# video.create_clip(crop: { x: 100, y: 100, width: 60, height: 60 })
+
 # Uncomment for resize proportional
 # comparable to command line `viddl https://www.youtube.com/watch?v=6g4dkBF5anU -w 240`
 # video.create_clip(width: 240)
@@ -32,6 +36,10 @@ video = Viddl::Video.download("https://www.youtube.com/watch?v=6g4dkBF5anU")
 # Uncomment for cut and resize
 # comparable to command line `viddl https://www.youtube.com/watch?v=6g4dkBF5anU -s 3 -d 2 -w 160 -h 120`
 # video.create_clip(start: 3, duration: 2, width: 160, height: 120)
+
+# Uncomment for cut and resize and crop
+# comparable to command line `viddl https://www.youtube.com/watch?v=6g4dkBF5anU -s 3 -d 2 -w 160 -h 120 --cx 100 --cy 100 --cw 120 --ch 120`
+# video.create_clip(start: 3, duration: 2, width: 320, height: 240, crop: { x: 10, y: 10, width: 12, height: 12 })
 
 # Uncomment for cut, resize and no audio
 # comparable to command line `viddl https://www.youtube.com/watch?v=6g4dkBF5anU -s 2 -e 3.5 -w 1920 -h 1280 --no-audio`

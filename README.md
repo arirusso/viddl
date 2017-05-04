@@ -49,7 +49,7 @@ viddl https://www.youtube.com/watch?v=6g4dkBF5anU -w 640 -h 480
 This will crop a 40x40 pixel box at position 20 x 20:
 
 ```sh
-viddl https://www.youtube.com/watch?v=6g4dkBF5anU -cx 20 -cy 20 -cw 40 -ch 40
+viddl https://www.youtube.com/watch?v=6g4dkBF5anU --cx 20 --cy 20 --cw 40 --ch 40
 ```
 
 #### Strip Audio
@@ -65,7 +65,7 @@ viddl https://www.youtube.com/watch?v=6g4dkBF5anU --no-audio
 Any or all of these options can be used together:
 
 ```sh
-viddl https://www.youtube.com/watch?v=6g4dkBF5anU -s 15 -e 22 --no-audio -cx 20 -cy 20 -cw 40 -ch 40 -w 640 -h 480
+viddl https://www.youtube.com/watch?v=6g4dkBF5anU -s 15 -e 22 --no-audio --cx 20 --cy 20 --cw 40 --ch 40 -w 640 -h 480
 ```
 
 ### Ruby
