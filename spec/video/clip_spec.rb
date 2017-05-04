@@ -265,6 +265,47 @@ describe Viddl::Video::Clip do
 
     end
 
+    context "resize options" do
+
+      context "with width only" do
+
+        it "has width" do
+          options = {
+            width: 640
+          }
+          path = @clip.send(:output_path, options)
+          expect(path).to(eq("6g4dkBF5anU-w640.mkv"))
+        end
+
+      end
+
+      context "with height only" do
+
+        it "has width" do
+          options = {
+            height: 480
+          }
+          path = @clip.send(:output_path, options)
+          expect(path).to(eq("6g4dkBF5anU-h480.mkv"))
+        end
+
+      end
+
+      context "with width and height" do
+
+        it "has width" do
+          options = {
+            width: 1280,
+            height: 720
+          }
+          path = @clip.send(:output_path, options)
+          expect(path).to(eq("6g4dkBF5anU-w1280h720.mkv"))
+        end
+
+      end
+
+    end
+
     context "with no audio" do
 
       it "has no audio option" do
@@ -277,7 +318,7 @@ describe Viddl::Video::Clip do
 
     end
 
-    context "with cut options" do
+    context "cut options" do
 
       context "with start time" do
 
