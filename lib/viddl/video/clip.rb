@@ -1,5 +1,7 @@
 require "viddl/video/clip/audio"
+require "viddl/video/clip/crop"
 require "viddl/video/clip/cut"
+require "viddl/video/clip/resize"
 
 module Viddl
 
@@ -44,9 +46,15 @@ module Viddl
       # @option options [Numeric] :end Time in the source file where the clip ends
       # @return [String]
       def command_line(options = {})
-        opts = options_formatted(options)
-        optional_args = " #{Cut.args(opts)} #{Audio.args(opts)}"
-        "ffmpeg -i #{@source_path}#{optional_args} -c:v copy -c:a copy #{output_path(opts)}"
+        if options.values.compact.empty?
+          # when there are no clip options, the source file can just be copied
+          # over to the output file location without using ffmpeg
+          "cp #{@source_path} #{output_path}"
+        else
+          opts = options_formatted(options)
+          optional_args = " #{Cut.args(opts)} #{Audio.args(opts)}"
+          "ffmpeg -i #{@source_path}#{optional_args} -c:v copy -c:a copy #{output_path(opts)}"
+        end
       end
 
       # Options formatted for ffmpeg
