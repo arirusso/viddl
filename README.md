@@ -14,6 +14,14 @@ Running Viddl generates video clip files in the current directory
 
 The command line usage and options are as follows:
 
+#### Download
+
+With no options, Viddl will download the original video
+
+```sh
+viddl https://www.youtube.com/watch?v=6g4dkBF5anU
+```
+
 #### Cut
 
 This will start the clip at 10 seconds into the original video and run for five seconds
@@ -62,56 +70,7 @@ viddl https://www.youtube.com/watch?v=6g4dkBF5anU -s 15 -e 22 --no-audio -cx 20 
 
 ### Ruby
 
-The Ruby usage and options are as follows:
-
-#### Cut
-
-This will start the clip at 10 seconds into the original video and run for five seconds
-
-```ruby
-Viddl::Video.process("https://www.youtube.com/watch?v=6g4dkBF5anU", start: 10, duration: 5)
-```
-
-Alternately, this will start the clip at 15 seconds in the original video and stop at 22 seconds
-
-```ruby
-Viddl::Video.process("https://www.youtube.com/watch?v=6g4dkBF5anU", start: 15, end: 22)
-```
-
-#### Resize
-
-This will resize to 640x480:
-
-```ruby
-Viddl::Video.process("https://www.youtube.com/watch?v=6g4dkBF5anU", width: 640, height: 480)
-```
-
-#### Crop
-
-This will crop a 40x40 pixel box at position 20x20:
-
-```ruby
-crop_options = {
-  x: 20,
-  y: 20,
-  width: 40,
-  height: 40
-}
-
-Viddl::Video.process("https://www.youtube.com/watch?v=6g4dkBF5anU", crop: crop_options)
-```
-
-#### Strip Audio
-
-Audio can be left out of the clip:
-
-```ruby
-Viddl::Video.process("https://www.youtube.com/watch?v=6g4dkBF5anU", audio: false)
-```
-
-#### Combine
-
-All of these options can be used together:
+Similar to the command line, Ruby usage and options are as follows:
 
 ```ruby
 options = {
@@ -128,7 +87,8 @@ options = {
   height: 480
 }
 
-Viddl::Video.process("https://www.youtube.com/watch?v=6g4dkBF5anU", options)
+video = Viddl::Video.download("https://www.youtube.com/watch?v=6g4dkBF5anU"
+video.create_clip(options)
 ```
 
 ## License
