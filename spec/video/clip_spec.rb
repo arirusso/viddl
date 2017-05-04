@@ -301,16 +301,6 @@ describe Viddl::Video::Clip do
 
   context "#options_formatted" do
 
-    context "with no options" do
-
-      it "returns empty hash" do
-        options = {}
-        args = @clip.send(:options_formatted, options)
-        expect(args.values.any?).to(be false)
-      end
-
-    end
-
     context "with duration" do
 
       it "has duration" do
