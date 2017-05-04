@@ -277,42 +277,46 @@ describe Viddl::Video::Clip do
 
     end
 
-    context "with start time" do
+    context "with cut options" do
 
-      it "matches source path file name" do
-        options = {
-          audio: true,
-          start: 10
-        }
-        path = @clip.send(:output_path, options)
-        expect(path).to(eq("6g4dkBF5anU-s10.mkv"))
+      context "with start time" do
+
+        it "matches source path file name" do
+          options = {
+            audio: true,
+            start: 10
+          }
+          path = @clip.send(:output_path, options)
+          expect(path).to(eq("6g4dkBF5anU-s10.mkv"))
+        end
+
       end
 
-    end
+      context "with duration" do
 
-    context "with duration" do
+        it "matches source path file name" do
+          options = {
+            audio: true,
+            duration: 1.5
+          }
+          path = @clip.send(:output_path, options)
+          expect(path).to(eq("6g4dkBF5anU-d1.5.mkv"))
+        end
 
-      it "matches source path file name" do
-        options = {
-          audio: true,
-          duration: 1.5
-        }
-        path = @clip.send(:output_path, options)
-        expect(path).to(eq("6g4dkBF5anU-d1.5.mkv"))
       end
 
-    end
+      context "with start time and duration" do
 
-    context "with start time and duration" do
+        it "matches source path file name" do
+          options = {
+            audio: true,
+            duration: 12,
+            start: 6
+          }
+          path = @clip.send(:output_path, options)
+          expect(path).to(eq("6g4dkBF5anU-s6d12.mkv"))
+        end
 
-      it "matches source path file name" do
-        options = {
-          audio: true,
-          duration: 12,
-          start: 6
-        }
-        path = @clip.send(:output_path, options)
-        expect(path).to(eq("6g4dkBF5anU-s6d12.mkv"))
       end
 
     end
@@ -321,58 +325,88 @@ describe Viddl::Video::Clip do
 
   context "#options_formatted" do
 
-    context "with duration" do
+    context "audio options" do
 
-      it "has duration" do
-        options = {
-          duration: 12
-        }
-        args = @clip.send(:options_formatted, options)
-        expect(args[:start]).to(be_nil)
-        expect(args[:duration]).to(eq(12))
+      context "with no options" do
+
+        it "has audio = true" do
+          options = {}
+          args = @clip.send(:options_formatted, options)
+          expect(args[:audio]).to(be true)
+        end
+
+      end
+
+      context "with audio = false" do
+
+        it "has audio = false" do
+          options = {
+            audio: false
+          }
+          args = @clip.send(:options_formatted, options)
+          expect(args[:audio]).to(be false)
+        end
+
       end
 
     end
 
-    context "with start time and duration" do
+    context "with cut options" do
 
-      it "has duration and start time" do
-        options = {
-          start: 10,
-          duration: 15
-        }
-        args = @clip.send(:options_formatted, options)
-        expect(args[:start]).to(eq(10))
-        expect(args[:duration]).to(eq(15))
+      context "with duration" do
+
+        it "has duration" do
+          options = {
+            duration: 12
+          }
+          args = @clip.send(:options_formatted, options)
+          expect(args[:start]).to(be_nil)
+          expect(args[:duration]).to(eq(12))
+        end
+
       end
 
-    end
+      context "with start time and duration" do
 
-    context "with start and end time" do
+        it "has duration and start time" do
+          options = {
+            start: 10,
+            duration: 15
+          }
+          args = @clip.send(:options_formatted, options)
+          expect(args[:start]).to(eq(10))
+          expect(args[:duration]).to(eq(15))
+        end
 
-      it "has duration and start time" do
-        options = {
-          start: 8,
-          end: 15
-        }
-        args = @clip.send(:options_formatted, options)
-        expect(args[:start]).to(eq(8))
-        expect(args[:duration]).to(eq(7))
       end
 
-    end
+      context "with start and end time" do
 
-    context "with start, end time and duration" do
+        it "has duration and start time" do
+          options = {
+            start: 8,
+            end: 15
+          }
+          args = @clip.send(:options_formatted, options)
+          expect(args[:start]).to(eq(8))
+          expect(args[:duration]).to(eq(7))
+        end
 
-      it "raises" do
-        options = {
-          duration: 5,
-          end: 15,
-          start: 10
-        }
-        expect {
-          @clip.send(:options_formatted, options)
-        }.to(raise_error(RuntimeError))
+      end
+
+      context "with start, end time and duration" do
+
+        it "raises" do
+          options = {
+            duration: 5,
+            end: 15,
+            start: 10
+          }
+          expect {
+            @clip.send(:options_formatted, options)
+          }.to(raise_error(RuntimeError))
+        end
+
       end
 
     end
