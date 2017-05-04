@@ -13,7 +13,7 @@ describe Viddl::Video::Instance do
     context "with associated download" do
 
       it "pulls filenames from directory" do
-        @video.instance_variable_set("@download", Object.new)
+        @download = Viddl::Video::Download.new(@video)
         expect(Dir).to(receive(:[]))
         @result = @video.source_filenames
       end
@@ -35,7 +35,7 @@ describe Viddl::Video::Instance do
   context "#clip" do
 
     before(:each) do
-      @video.instance_variable_set("@download", Object.new)
+      @download = Viddl::Video::Download.new(@video)
       expect(@video).to(receive(:source_filenames).and_return(["/tmp/#{@video_id}.mkv"]))
     end
 
@@ -104,14 +104,14 @@ describe Viddl::Video::Instance do
 
   end
 
-  context "#download" do
+  context "#process_download" do
 
     context "with no options" do
 
       it "execs command line" do
         @options = {}
         expect(Kernel).to(receive(:system).and_return(true))
-        @result = @video.download(@options)
+        @result = @video.process_download(@options)
       end
 
     end
