@@ -33,8 +33,8 @@ describe Viddl::Video::Download do
       expect(@result).to(include(@source_url))
     end
 
-    it "includes temp file path" do
-      expect(@result).to(include("#{Viddl::Video::Download::TEMPDIR}/#{@video_id}"))
+    it "includes temp dir" do
+      expect(@result).to(include("#{Viddl::Video::Download::TEMPDIR}/"))
     end
 
   end
