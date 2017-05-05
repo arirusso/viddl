@@ -3,9 +3,17 @@ require "helper"
 describe Viddl::Video::Instance do
 
   before(:each) do
-    @video_id = "6g4dkBF5anU"
-    @source_url = "https://youtube.com/watch?v=#{@video_id}"
+    @yt_video_id = "6g4dkBF5anU"
+    @source_url = "https://youtube.com/watch?v=#{@yt_video_id}"
     @video = Viddl::Video::Instance.new(@source_url)
+  end
+
+  context "#populate_id" do
+
+    it "populates id" do
+      expect(@video.id).to_not(be_nil)
+    end
+
   end
 
   context "#source_filenames" do
