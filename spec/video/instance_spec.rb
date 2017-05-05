@@ -12,6 +12,7 @@ describe Viddl::Video::Instance do
 
     it "populates id" do
       expect(@video.id).to_not(be_nil)
+      expect(@video.id.length).to(eq(10))
     end
 
   end

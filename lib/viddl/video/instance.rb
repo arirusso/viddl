@@ -9,6 +9,8 @@ module Viddl
       attr_accessor :download
       attr_reader :id, :source_url
 
+      ID_LENGTH = 10
+
       # @param [String] url The url of the video source
       def initialize(url)
         @source_url = url
@@ -54,7 +56,7 @@ module Viddl
       # The video instance id
       # @return [String]
       def populate_id
-        @id = Base64.encode64(@source_url)
+        @id = Base64.encode64(@source_url).slice(0, ID_LENGTH)
       end
 
     end
