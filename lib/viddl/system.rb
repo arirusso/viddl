@@ -31,6 +31,7 @@ module Viddl
       if result.nil?
         raise("Viddl requires that youtube-dl be installed https://github.com/rg3/youtube-dl")
       end
+      true
     end
 
   end
