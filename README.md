@@ -14,7 +14,7 @@ Running Viddl generates video clip files in the current directory
 
 ### Command Line
 
-The command line usage and options are as follows:
+The command line usage and options are as follows
 
 #### Download
 
@@ -32,15 +32,15 @@ This will start the clip at 10 seconds into the original video and run for five 
 viddl https://www.youtube.com/watch?v=6g4dkBF5anU -s 10 -d 5
 ```
 
-Alternately, this will start the clip at 15 seconds in the original video and stop at 22 seconds
+Alternatively, this will also start the clip at 15 seconds in the original video and stop at 15 seconds
 
 ```sh
-viddl https://www.youtube.com/watch?v=6g4dkBF5anU -s 15 -e 22
+viddl https://www.youtube.com/watch?v=6g4dkBF5anU -s 10 -e 15
 ```
 
 #### Resize
 
-This will resize to 640 x 480:
+This will resize to 640 x 480
 
 ```sh
 viddl https://www.youtube.com/watch?v=6g4dkBF5anU -w 640 -h 480
@@ -48,7 +48,7 @@ viddl https://www.youtube.com/watch?v=6g4dkBF5anU -w 640 -h 480
 
 #### Crop
 
-This will crop a 40 x 40 pixel box at position 20 x 20:
+This will crop a 40 x 40 pixel box at position 20 x 20
 
 ```sh
 viddl https://www.youtube.com/watch?v=6g4dkBF5anU --cx 20 --cy 20 --cw 40 --ch 40
@@ -56,7 +56,7 @@ viddl https://www.youtube.com/watch?v=6g4dkBF5anU --cx 20 --cy 20 --cw 40 --ch 4
 
 #### Strip Audio
 
-Audio can be left out of the clip:
+This will make the clip silent
 
 ```sh
 viddl https://www.youtube.com/watch?v=6g4dkBF5anU --no-audio
@@ -64,7 +64,7 @@ viddl https://www.youtube.com/watch?v=6g4dkBF5anU --no-audio
 
 #### Combine
 
-Any or all of these options can be used together:
+Any or all of these options can be used together
 
 ```sh
 viddl https://www.youtube.com/watch?v=6g4dkBF5anU -s 15 -e 22 --no-audio --cx 20 --cy 20 --cw 40 --ch 40 -w 640 -h 480
@@ -72,7 +72,7 @@ viddl https://www.youtube.com/watch?v=6g4dkBF5anU -s 15 -e 22 --no-audio --cx 20
 
 ### Ruby
 
-Similar to the command line, Ruby usage and options are as follows:
+Similar to the command line, Ruby usage and options are as follows
 
 ```ruby
 options = {
