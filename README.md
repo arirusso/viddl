@@ -32,7 +32,7 @@ This will start the clip at 10 seconds into the original video and run for five 
 viddl https://www.youtube.com/watch?v=6g4dkBF5anU -s 10 -d 5
 ```
 
-Alternatively, this will also start the clip at 15 seconds in the original video and stop at 15 seconds
+Alternatively, this will also start the clip at 10 seconds into the original video and stop at 15 seconds
 
 ```sh
 viddl https://www.youtube.com/watch?v=6g4dkBF5anU -s 10 -e 15
