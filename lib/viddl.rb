@@ -1,5 +1,8 @@
 #
-# viddl
+# Viddl
+#
+# Ruby/Command line tool to quickly download, cut, crop and
+# resize video clips
 #
 # (c)2017 Ari Russo
 # Apache 2.0 License
