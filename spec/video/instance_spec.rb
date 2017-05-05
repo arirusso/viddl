@@ -45,7 +45,7 @@ describe Viddl::Video::Instance do
 
     before(:each) do
       @download = Viddl::Video::Download.new(@video)
-      expect(@video).to(receive(:source_filenames).and_return(["/tmp/#{@video_id}.mkv"]))
+      expect(@video).to(receive(:source_filenames).and_return(["#{Viddl::Video::Download::TEMPDIR}/#{@video_id}.mkv"]))
     end
 
     context "with no options" do

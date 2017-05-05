@@ -3,7 +3,7 @@ require "helper"
 describe Viddl::Video::Clip do
 
   before(:each) do
-    @source_file = "/tmp/6g4dkBF5anU.mkv"
+    @source_file = "#{Viddl::Video::Download::TEMPDIR}/6g4dkBF5anU.mkv"
     @clip = Viddl::Video::Clip.new(@source_file)
   end
 
