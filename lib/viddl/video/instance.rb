@@ -1,3 +1,5 @@
+require "base64"
+
 module Viddl
 
   module Video
@@ -52,7 +54,7 @@ module Viddl
       # The video instance id
       # @return [String]
       def populate_id
-        @id = @source_url.scan(/youtube.com\/watch\?v\=(\S*)&?/).flatten.first
+        @id = Base64.encode64(@source_url)
       end
 
     end
