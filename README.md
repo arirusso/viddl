@@ -6,7 +6,17 @@ Use Viddl to quickly download, cut, crop and resize videos
 
 Viddl can be used at the [command line](#command-line) or in [Ruby](#ruby)
 
-It requires that both [youtube-dl](https://github.com/rg3/youtube-dl) and [ffmpeg](https://ffmpeg.org) are installed before using.
+## Installation
+
+Viddl requires that both [youtube-dl](https://github.com/rg3/youtube-dl) and [ffmpeg](https://ffmpeg.org) are installed before using.
+
+Install Viddl using gem
+
+`gem install viddl`
+
+or using Bundler by adding the following to your Gemfile
+
+`gem "viddl"`
 
 ## Usage
 
