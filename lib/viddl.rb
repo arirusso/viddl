@@ -9,6 +9,8 @@
 # https://github.com/arirusso/viddl
 #
 
+require "open3"
+
 # modules
 require "viddl/system"
 require "viddl/video"

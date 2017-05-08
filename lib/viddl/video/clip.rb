@@ -12,7 +12,7 @@ module Viddl
       MODULES = [Audio, Crop, Cut, Resize]
 
       # Create a clip using the given video source file path and options
-      # @param [String] source_path Path to video file to create clip from
+      # @param [String] id
       # @param [Hash] options
       # @option options [Boolean] :audio Whether to include audio
       # @option options [Numeric] :start Time in the source file where the clip starts
@@ -22,15 +22,15 @@ module Viddl
       # @option options [Integer, String] :height The desired height to resize to
       # @option options [Hash] :crop The desired crop parameters (:x, :y, :width, :height)
       # @return [Clip]
-      def self.process(path, options = {})
-        clip = new(path)
-        clip.process(options)
+      def self.process(id, stream, options = {})
+        clip = new(id)
+        clip.process(stream, options)
         clip
       end
 
-      # @param [String] source_path Path to video file to create clip from
-      def initialize(source_path)
-        @source_path = source_path
+      # @param [String] id
+      def initialize(id)
+        @id = id
       end
 
       # Create a clip using the given options
@@ -43,9 +43,11 @@ module Viddl
       # @option options [Integer, String] :height The desired height to resize to
       # @option options [Hash] :crop The desired crop parameters (:x, :y, :width, :height)
       # @return [Boolean]
-      def process(options = {})
+      def process(stream, options = {})
         command = command_line(options)
-        Kernel.system(command)
+        Open3.popen2(command) do |f_stdin, f_stdout|
+          IO.copy_stream(stream, f_stdin)
+        end
       end
 
       private
@@ -64,7 +66,7 @@ module Viddl
         if options.values.compact.empty?
           # when there are no clip options, the source file can just be copied
           # over to the output file location without using ffmpeg
-          "cp #{@source_path} #{output_path}"
+          "tee #{@id}.mkv"
         else
           formatted_opts = options_formatted(options)
 
@@ -79,7 +81,7 @@ module Viddl
             module_arg_string += " -vf '#{module_filters.join(",")}'"
           end
 
-          "ffmpeg -i #{@source_path} #{module_arg_string} #{output_path(formatted_opts)}"
+          "ffmpeg -i pipe:0 #{module_arg_string} #{@id}.m4v"
         end
       end
 
@@ -96,30 +98,6 @@ module Viddl
       def options_formatted(options = {})
         mod_options = MODULES.map { |mod| mod.options_formatted(options) }
         mod_options.inject(:merge)
-      end
-
-      # Path of the created clip
-      # @param [Hash] options
-      # @option options [Boolean] :audio Whether to include audio
-      # @option options [Numeric] :start Time in the source file where the clip starts
-      # @option options [Numeric] :duration Duration of the clip
-      # @option options [Integer, String] :width The desired width to resize to
-      # @option options [Integer, String] :height The desired height to resize to
-      # @option options [Hash] :crop The desired crop parameters (:x, :y, :width, :height)
-      # @return [String]
-      def output_path(options = {})
-        base = @source_path.scan(/#{Download::TEMPDIR}\/(.*)/).flatten.first
-        result = base
-        if !options.values.flatten.compact.empty?
-          name, ext = *base.split(".")
-          tokens = ""
-          MODULES.each do |mod|
-            token = mod.filename_token(options)
-            tokens += "-#{token}" unless token.nil?
-          end
-          result = "#{name}#{tokens}.#{ext}"
-        end
-        result
       end
 
     end

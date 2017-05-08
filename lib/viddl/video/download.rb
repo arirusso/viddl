@@ -15,9 +15,9 @@ module Viddl
       # @param [Video::Instance] video
       # @param [Hash] options
       # @return [Download]
-      def self.process(video, options = {})
+      def self.process(video, options = {}, &block)
         download = new(video)
-        download.process(options)
+        download.process(options, &block)
         download
       end
 
@@ -30,10 +30,10 @@ module Viddl
       # Download the video file
       # @param [Hash] options
       # @return [Boolean]
-      def process(options = {})
-        result = Kernel.system(command_line)
-        raise(result.to_s) unless result
-        true
+      def process(options = {}, &block)
+        Open3.popen2(command_line) do |y_stdin, y_stdout|
+          yield(y_stdout)
+        end
       end
 
       private
@@ -41,7 +41,7 @@ module Viddl
       # Command line to download the video file
       # @return [String]
       def command_line
-        "youtube-dl #{@video.source_url} #{FORMAT_ARG} -o '#{TEMPDIR}/#{@video.id}s.%(ext)s'"
+        "youtube-dl #{@video.source_url} #{FORMAT_ARG} -o -"
       end
 
     end

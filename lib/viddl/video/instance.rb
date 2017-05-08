@@ -28,17 +28,15 @@ module Viddl
       # @option options [Integer, String] :height The desired height to resize to
       # @option options [Hash] :crop The desired crop parameters (:x, :y, :width, :height)
       # @return [Array<Clip>]
-      def create_clip(options = {})
-        source_filenames.map do |filename|
-          Clip.process(filename, options)
-        end
+      def create_clip(stream, options = {})
+        Clip.process(@id, stream, options)
       end
 
       # Download the video source
       # @param [Hash] options
       # @return [Download]
-      def process_download(options = {})
-        @download = Download.process(self, options)
+      def process_download(options = {}, &block)
+        @download = Download.process(self, options, &block)
       end
 
       # The downloaded source filenames

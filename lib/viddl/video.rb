@@ -12,9 +12,11 @@ module Viddl
     # @param [String] url
     # @param [Hash] options
     # @return [Video::Instance]
-    def download(url, options = {})
+    def download(url, options = {}, &block)
       video = Instance.new(url)
-      video.process_download(options)
+      video.process_download(options) do |stream|
+        yield(video, stream)
+      end
       video
     end
 
