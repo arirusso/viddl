@@ -3,15 +3,15 @@ $:.unshift(File.join("..", "lib"))
 
 require "viddl"
 
-video = Viddl::Video.download("https://www.youtube.com/watch?v=6g4dkBF5anU")
+video = Viddl::Video.download("https://www.youtube.com/watch?v=6g4dkBF5anU") do |video, stream|
 
 # Uncomment for full clip
 # comparable to command line `viddl https://www.youtube.com/watch?v=6g4dkBF5anU`
 # video.create_clip
-
 # Uncomment for cut
 # comparable to command line `viddl https://www.youtube.com/watch?v=6g4dkBF5anU -s 5 -e 10`
-# video.create_clip(start: 5, end: 10)
+  video.create_clip(stream, start: 5, end: 10)
+end
 
 # Uncomment for cut with duration
 # comparable to command line `viddl https://www.youtube.com/watch?v=6g4dkBF5anU -s 5 -d 5`
