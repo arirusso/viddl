@@ -1,3 +1,5 @@
+require "pathname"
+
 require "viddl/video/clip/audio"
 require "viddl/video/clip/crop"
 require "viddl/video/clip/cut"
@@ -48,6 +50,14 @@ module Viddl
         Kernel.system(command)
       end
 
+      # Path of the created clip
+      # @return [Pathname]
+      def path
+        if !@path.nil? && File.exists?(@path)
+          @path
+        end
+      end
+
       private
 
       # Command line to create a clip from the source file and given options
@@ -64,7 +74,8 @@ module Viddl
         if options.values.compact.empty?
           # when there are no clip options, the source file can just be copied
           # over to the output file location without using ffmpeg
-          "cp #{@source_path} #{output_path}"
+          populate_output_path
+          "cp #{@source_path} #{@path.to_s}"
         else
           formatted_opts = options_formatted(options)
 
@@ -79,7 +90,8 @@ module Viddl
             module_arg_string += " -vf '#{module_filters.join(",")}'"
           end
 
-          "ffmpeg -i #{@source_path} #{module_arg_string} #{output_path(formatted_opts)}"
+          populate_output_path(formatted_opts)
+          "ffmpeg -i #{@source_path} #{module_arg_string} #{@path.to_s}"
         end
       end
 
@@ -98,7 +110,7 @@ module Viddl
         mod_options.inject(:merge)
       end
 
-      # Path of the created clip
+      # Set the clip path
       # @param [Hash] options
       # @option options [Boolean] :audio Whether to include audio
       # @option options [Numeric] :start Time in the source file where the clip starts
@@ -107,7 +119,7 @@ module Viddl
       # @option options [Integer, String] :height The desired height to resize to
       # @option options [Hash] :crop The desired crop parameters (:x, :y, :width, :height)
       # @return [String]
-      def output_path(options = {})
+      def populate_output_path(options = {})
         base = @source_path.scan(/#{Download::TEMPDIR}\/(.*)/).flatten.first
         result = base
         if !options.values.flatten.compact.empty?
@@ -119,7 +131,7 @@ module Viddl
           end
           result = "#{name}#{tokens}.#{ext}"
         end
-        result
+        @path = Pathname.new(result)
       end
 
     end

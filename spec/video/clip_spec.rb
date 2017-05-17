@@ -297,13 +297,40 @@ describe Viddl::Video::Clip do
 
   end
 
-  context "#output_path" do
+  context "#path" do
+
+    context "when file doesn't exist" do
+
+      it "returns nil" do
+        @clip.send(:populate_output_path)
+        path = @clip.path
+        expect(path).to(be_nil)
+      end
+
+    end
+
+    context "when file exists" do
+
+      it "returns nil" do
+        expect(File).to(receive(:exists?).and_return(true))
+        @clip.send(:populate_output_path)
+        path = @clip.path
+        expect(path).to_not(be_nil)
+        expect(path).to(be_kind_of(Pathname))
+        expect(path.to_s).to(eq("6g4dkBF5anU.mkv"))
+      end
+
+    end
+
+  end
+
+  context "#populate_output_path" do
 
     context "with no options" do
 
       it "matches source path file name" do
-        path = @clip.send(:output_path)
-        expect(path).to(eq("6g4dkBF5anU.mkv"))
+        path = @clip.send(:populate_output_path)
+        expect(path.to_s).to(eq("6g4dkBF5anU.mkv"))
       end
 
     end
@@ -321,8 +348,8 @@ describe Viddl::Video::Clip do
               height: 230
             }
           }
-          path = @clip.send(:output_path, options)
-          expect(path).to(eq("6g4dkBF5anU-cx200cy210cw220ch230.mkv"))
+          path = @clip.send(:populate_output_path, options)
+          expect(path.to_s).to(eq("6g4dkBF5anU-cx200cy210cw220ch230.mkv"))
         end
 
       end
@@ -337,8 +364,8 @@ describe Viddl::Video::Clip do
           options = {
             width: 640
           }
-          path = @clip.send(:output_path, options)
-          expect(path).to(eq("6g4dkBF5anU-w640.mkv"))
+          path = @clip.send(:populate_output_path, options)
+          expect(path.to_s).to(eq("6g4dkBF5anU-w640.mkv"))
         end
 
       end
@@ -349,8 +376,8 @@ describe Viddl::Video::Clip do
           options = {
             height: 480
           }
-          path = @clip.send(:output_path, options)
-          expect(path).to(eq("6g4dkBF5anU-h480.mkv"))
+          path = @clip.send(:populate_output_path, options)
+          expect(path.to_s).to(eq("6g4dkBF5anU-h480.mkv"))
         end
 
       end
@@ -362,8 +389,8 @@ describe Viddl::Video::Clip do
             width: 1280,
             height: 720
           }
-          path = @clip.send(:output_path, options)
-          expect(path).to(eq("6g4dkBF5anU-w1280h720.mkv"))
+          path = @clip.send(:populate_output_path, options)
+          expect(path.to_s).to(eq("6g4dkBF5anU-w1280h720.mkv"))
         end
 
       end
@@ -376,8 +403,8 @@ describe Viddl::Video::Clip do
         options = {
           audio: false
         }
-        path = @clip.send(:output_path, options)
-        expect(path).to(eq("6g4dkBF5anU-noaudio.mkv"))
+        path = @clip.send(:populate_output_path, options)
+        expect(path.to_s).to(eq("6g4dkBF5anU-noaudio.mkv"))
       end
 
     end
@@ -391,8 +418,8 @@ describe Viddl::Video::Clip do
             audio: true,
             start: 10
           }
-          path = @clip.send(:output_path, options)
-          expect(path).to(eq("6g4dkBF5anU-s10.mkv"))
+          path = @clip.send(:populate_output_path, options)
+          expect(path.to_s).to(eq("6g4dkBF5anU-s10.mkv"))
         end
 
       end
@@ -404,8 +431,8 @@ describe Viddl::Video::Clip do
             audio: true,
             duration: 1.5
           }
-          path = @clip.send(:output_path, options)
-          expect(path).to(eq("6g4dkBF5anU-d1.5.mkv"))
+          path = @clip.send(:populate_output_path, options)
+          expect(path.to_s).to(eq("6g4dkBF5anU-d1.5.mkv"))
         end
 
       end
@@ -418,8 +445,8 @@ describe Viddl::Video::Clip do
             duration: 12,
             start: 6
           }
-          path = @clip.send(:output_path, options)
-          expect(path).to(eq("6g4dkBF5anU-s6d12.mkv"))
+          path = @clip.send(:populate_output_path, options)
+          expect(path.to_s).to(eq("6g4dkBF5anU-s6d12.mkv"))
         end
 
       end
