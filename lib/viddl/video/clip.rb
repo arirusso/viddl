@@ -50,8 +50,8 @@ module Viddl
         Kernel.system(command)
       end
 
-      # Path of the created clip
-      # @return [Pathname]
+      # Path of the created clip. Is nil until file exists
+      # @return [Pathname, nil]
       def path
         if !@path.nil? && File.exists?(@path)
           @path
