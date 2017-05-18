@@ -1,4 +1,4 @@
-require "base64"
+require "digest"
 
 module Viddl
 
@@ -57,7 +57,7 @@ module Viddl
       # The video instance id
       # @return [String]
       def populate_id
-        @id = Base64.encode64(@source_url).slice(0, ID_LENGTH)
+        @id = Digest::SHA256.hexdigest(@source_url).slice(0, ID_LENGTH)
       end
 
     end
