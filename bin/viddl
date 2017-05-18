@@ -67,6 +67,12 @@ opts = OptionParser.new do |opts|
 
   opts.on_tail("--help", "Show this message") { help(opts) }
 
+  # file
+
+  opts.on("-oPATH", "--output-path=PATH", "Output path") do |path|
+    options[:output_path] = path
+  end
+
 end
 opts.parse!
 

@@ -96,7 +96,8 @@ options = {
     height: 40
   },
   width: 640,
-  height: 480
+  height: 480,
+  output_path: "assets/video"
 }
 
 video = Viddl::Video.download("https://www.youtube.com/watch?v=6g4dkBF5anU")

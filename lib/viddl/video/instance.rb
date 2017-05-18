@@ -27,6 +27,7 @@ module Viddl
       # @option options [Integer, String] :width The desired width to resize to
       # @option options [Integer, String] :height The desired height to resize to
       # @option options [Hash] :crop The desired crop parameters (:x, :y, :width, :height)
+      # @option options [Pathname, String] :output_path path where clip will be written. Can be directory or filename
       # @return [Array<Clip>]
       def create_clip(options = {})
         source_filenames.map do |filename|

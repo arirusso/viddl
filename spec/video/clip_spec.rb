@@ -335,6 +335,35 @@ describe Viddl::Video::Clip do
 
     end
 
+    context "with output path" do
+
+      context "with valid directory" do
+
+        it "includes directory" do
+          expect(File).to(receive(:directory?).and_return(true))
+          options = {
+            output_path: "this/isadir"
+          }
+          path = @clip.send(:populate_output_path, options)
+          expect(path.to_s).to(eq("this/isadir/6g4dkBF5anU.mkv"))
+        end
+
+      end
+
+      context "with path/filename" do
+
+        it "includes path/filename" do
+          expect(File).to(receive(:directory?).and_return(false))
+          options = {
+            output_path: "thisis/afile"
+          }
+          path = @clip.send(:populate_output_path, options)
+          expect(path.to_s).to(eq("thisis/afile.mkv"))
+        end
+
+      end
+    end
+
     context "crop options" do
 
       context "valid" do

@@ -23,6 +23,7 @@ module Viddl
       # @option options [Integer, String] :width The desired width to resize to
       # @option options [Integer, String] :height The desired height to resize to
       # @option options [Hash] :crop The desired crop parameters (:x, :y, :width, :height)
+      # @option options [Pathname, String] :output_path Path where clip will be written
       # @return [Clip]
       def self.process(path, options = {})
         clip = new(path)
@@ -44,6 +45,7 @@ module Viddl
       # @option options [Integer, String] :width The desired width to resize to
       # @option options [Integer, String] :height The desired height to resize to
       # @option options [Hash] :crop The desired crop parameters (:x, :y, :width, :height)
+      # @option options [Pathname, String] :output_path Path where clip will be written
       # @return [Boolean]
       def process(options = {})
         command = command_line(options)
@@ -69,6 +71,7 @@ module Viddl
       # @option options [Integer, String] :width The desired width to resize to
       # @option options [Integer, String] :height The desired height to resize to
       # @option options [Hash] :crop The desired crop parameters (:x, :y, :width, :height)
+      # @option options [Pathname, String] :output_path Path where clip will be written
       # @return [String]
       def command_line(options = {})
         if options.values.compact.empty?
@@ -118,18 +121,24 @@ module Viddl
       # @option options [Integer, String] :width The desired width to resize to
       # @option options [Integer, String] :height The desired height to resize to
       # @option options [Hash] :crop The desired crop parameters (:x, :y, :width, :height)
+      # @option options [Pathname, String] :output_path Path where clip will be written
       # @return [String]
       def populate_output_path(options = {})
         base = @source_path.scan(/#{Download::TEMPDIR}\/(.*)/).flatten.first
         result = base
         if !options.values.flatten.compact.empty?
           name, ext = *base.split(".")
-          tokens = ""
-          MODULES.each do |mod|
-            token = mod.filename_token(options)
-            tokens += "-#{token}" unless token.nil?
+          result = if options[:output_path].nil? || File.directory?(options[:output_path])
+            tokens = ""
+            MODULES.each do |mod|
+              token = mod.filename_token(options)
+              tokens += "-#{token}" unless token.nil?
+            end
+            path = "#{options[:output_path]}/" unless options[:output_path].nil?
+            "#{path}#{name}#{tokens}.#{ext}"
+          elsif !options[:output_path].nil?
+            "#{options[:output_path]}.#{ext}"
           end
-          result = "#{name}#{tokens}.#{ext}"
         end
         @path = Pathname.new(result)
       end

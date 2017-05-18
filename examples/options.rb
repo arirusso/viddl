@@ -44,3 +44,11 @@ video = Viddl::Video.download("https://www.youtube.com/watch?v=6g4dkBF5anU")
 # Uncomment for cut, resize and no audio
 # comparable to command line `viddl https://www.youtube.com/watch?v=6g4dkBF5anU -s 2 -e 3.5 -w 1920 -h 1280 --no-audio`
 # video.create_clip(start: 2, end: 3.5, width: 1920, height: 1280, audio: false)
+
+# Uncomment for output path
+# comparable to command line `viddl https://www.youtube.com/watch?v=6g4dkBF5anU -o assets/video`
+# video.create_clip(output_path: "assets/video")
+
+# Uncomment for output path and filename (will output something like my_clip.m4v)
+# comparable to command line `viddl https://www.youtube.com/watch?v=6g4dkBF5anU -o assets/video/my_clip`
+# video.create_clip(output_path: "assets/video/my_clip")
