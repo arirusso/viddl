@@ -74,10 +74,10 @@ module Viddl
       # @option options [Pathname, String] :output_path Path where clip will be written
       # @return [String]
       def command_line(options = {})
-        if options.values.compact.empty?
+        if options.values.empty? || options.keys == [:output_path]
           # when there are no clip options, the source file can just be copied
-          # over to the output file location without using ffmpeg
-          populate_output_path
+          # over to the output file path without using ffmpeg
+          populate_output_path(options)
           "cp #{@source_path} #{@path.to_s}"
         else
           formatted_opts = options_formatted(options)
@@ -110,7 +110,8 @@ module Viddl
       # @return [Hash]
       def options_formatted(options = {})
         mod_options = MODULES.map { |mod| mod.options_formatted(options) }
-        mod_options.inject(:merge)
+        formatted_options = mod_options.inject(:merge)
+        formatted_options.delete_if { |k, v| v.nil? }
       end
 
       # Set the clip path
