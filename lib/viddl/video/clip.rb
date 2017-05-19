@@ -124,7 +124,7 @@ module Viddl
       # @option options [Pathname, String] :output_path Path where clip will be written
       # @return [String]
       def populate_output_path(options = {})
-        base = @source_path.scan(/#{Download::TEMPDIR}\/(.*)/).flatten.first
+        base = Pathname.new(@source_path).basename.to_s
         result = base
         if !options.values.flatten.compact.empty?
           name, ext = *base.split(".")
@@ -134,10 +134,10 @@ module Viddl
               token = mod.filename_token(options)
               tokens += "-#{token}" unless token.nil?
             end
-            path = "#{options[:output_path]}/" unless options[:output_path].nil?
+            path = "#{options[:output_path].to_s}/" unless options[:output_path].nil?
             "#{path}#{name}#{tokens}.#{ext}"
           elsif !options[:output_path].nil?
-            "#{options[:output_path]}.#{ext}"
+            "#{options[:output_path].to_s}.#{ext}"
           end
         end
         @path = Pathname.new(result)
