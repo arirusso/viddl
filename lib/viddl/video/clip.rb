@@ -74,7 +74,7 @@ module Viddl
       # @option options [Pathname, String] :output_path Path where clip will be written
       # @return [String]
       def command_line(options = {})
-        if options.values.empty? || options.keys == [:output_path]
+        if options.empty? || options.keys == [:output_path]
           # when there are no clip options, the source file can just be copied
           # over to the output file path without using ffmpeg
           populate_output_path(options)
@@ -109,9 +109,11 @@ module Viddl
         # @option options [Hash] :crop The desired crop parameters (:x, :y, :width, :height)
       # @return [Hash]
       def options_formatted(options = {})
+        options.delete_if { |k, v| v.nil? }
         mod_options = MODULES.map { |mod| mod.options_formatted(options) }
         formatted_options = mod_options.inject(:merge)
-        formatted_options.delete_if { |k, v| v.nil? }
+        formatted_options[:output_path] = options[:output_path]
+        formatted_options
       end
 
       # Set the clip path
@@ -126,19 +128,20 @@ module Viddl
       # @return [String]
       def populate_output_path(options = {})
         base = Pathname.new(@source_path).basename.to_s
-        result = base
-        if !options.values.flatten.compact.empty?
+        if options.empty?
+          result = base
+        else
           name, ext = *base.split(".")
-          result = if options[:output_path].nil? || File.directory?(options[:output_path])
+          if options[:output_path].nil? || File.directory?(options[:output_path])
             tokens = ""
             MODULES.each do |mod|
               token = mod.filename_token(options)
               tokens += "-#{token}" unless token.nil?
             end
-            path = "#{options[:output_path].to_s}/" unless options[:output_path].nil?
-            "#{path}#{name}#{tokens}.#{ext}"
+            result = options[:output_path].nil? ? "" : "#{options[:output_path].to_s}/"
+            result += "#{name}#{tokens}.#{ext}"
           elsif !options[:output_path].nil?
-            "#{options[:output_path].to_s}.#{ext}"
+            result = "#{options[:output_path].to_s}.#{ext}"
           end
         end
         @path = Pathname.new(result)
