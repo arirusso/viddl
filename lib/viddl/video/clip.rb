@@ -97,7 +97,7 @@ module Viddl
           end
 
           populate_output_path(formatted_opts)
-          "ffmpeg -i #{options[:flags]} #{@source_path} #{module_arg_string} #{@path.to_s}"
+          "ffmpeg -i #{@source_path} #{options[:flags]} #{module_arg_string} #{@path.to_s}"
         end
       end
 
