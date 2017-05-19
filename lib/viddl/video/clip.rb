@@ -17,6 +17,7 @@ module Viddl
       # @param [String] source_path Path to video file to create clip from
       # @param [Hash] options
       # @option options [Boolean] :audio Whether to include audio
+      # @option options [String] :flags Flags to pass to ffmpeg
       # @option options [Numeric] :start Time in the source file where the clip starts
       # @option options [Numeric] :duration Duration of the clip
       # @option options [Numeric] :end Time in the source file where the clip ends
@@ -39,6 +40,7 @@ module Viddl
       # Create a clip using the given options
       # @param [Hash] options
       # @option options [Boolean] :audio Whether to include audio
+      # @option options [String] :flags Flags to pass to ffmpeg
       # @option options [Numeric] :start Time in the source file where the clip starts
       # @option options [Numeric] :duration Duration of the clip
       # @option options [Numeric] :end Time in the source file where the clip ends
@@ -49,6 +51,7 @@ module Viddl
       # @return [Boolean]
       def process(options = {})
         command = command_line(options)
+        p command
         Kernel.system(command)
       end
 
@@ -65,6 +68,7 @@ module Viddl
       # Command line to create a clip from the source file and given options
       # @param [Hash] options
       # @option options [Boolean] :audio Whether to include audio
+      # @option options [String] :flags Flags to pass to ffmpeg
       # @option options [Numeric] :start Time in the source file where the clip starts
       # @option options [Numeric] :duration Duration of the clip
       # @option options [Numeric] :end Time in the source file where the clip ends
@@ -94,13 +98,14 @@ module Viddl
           end
 
           populate_output_path(formatted_opts)
-          "ffmpeg -i #{@source_path} #{module_arg_string} #{@path.to_s}"
+          "ffmpeg -i #{@source_path} #{module_arg_string} #{options[:flags]} #{@path.to_s}"
         end
       end
 
       # Options formatted for ffmpeg
       # @param [Hash] options
       # @option options [Boolean] :audio Whether to include audio (default: true)
+      # @option options [String] :flags Flags to pass to ffmpeg
       # @option options [Numeric] :start Time in the source file where the clip starts
       # @option options [Numeric] :duration Duration of the clip
       # @option options [Numeric] :end Time in the source file where the clip ends
@@ -112,13 +117,16 @@ module Viddl
         options.delete_if { |k, v| v.nil? }
         mod_options = MODULES.map { |mod| mod.options_formatted(options) }
         formatted_options = mod_options.inject(:merge)
-        formatted_options[:output_path] = options[:output_path]
+        [:flags, :output_path].each do |option|
+          formatted_options[option] = options[option] unless options[option].nil?
+        end
         formatted_options
       end
 
       # Set the clip path
       # @param [Hash] options
       # @option options [Boolean] :audio Whether to include audio
+      # @option options [String] :flags Flags to pass to ffmpeg
       # @option options [Numeric] :start Time in the source file where the clip starts
       # @option options [Numeric] :duration Duration of the clip
       # @option options [Integer, String] :width The desired width to resize to

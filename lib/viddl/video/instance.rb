@@ -21,6 +21,7 @@ module Viddl
       # Cut the video source using the given options
       # @param [Hash] options
       # @option options [Boolean] :audio Whether to include audio
+      # @option options [String] :flags Flags to pass to ffmpeg
       # @option options [Numeric] :start Time in the source file where the clip starts
       # @option options [Numeric] :duration Duration of the clip
       # @option options [Numeric] :end Time in the source file where the clip ends
