@@ -51,7 +51,6 @@ module Viddl
       # @return [Boolean]
       def process(options = {})
         command = command_line(options)
-        p command
         Kernel.system(command)
       end
 
