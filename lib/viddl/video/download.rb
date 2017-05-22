@@ -7,7 +7,7 @@ module Viddl
     class Download
 
       # download is stored to temp dir before processing
-      TEMPDIR = Dir.tmpdir
+      DEFAULT_TEMPDIR = Dir.tmpdir
       # download format is forced to mp4 to optimize for quickness
       FORMAT_ARG = "-f 'best[ext=mp4]'"
 
@@ -46,7 +46,7 @@ module Viddl
       # @option options [String] :flags Flags to pass to youtube-dl
       # @return [String]
       def command_line(options = {})
-        output = "-o '#{TEMPDIR}/#{@video.id}s.%(ext)s'"
+        output = "-o '#{DEFAULT_TEMPDIR}/#{@video.id}s.%(ext)s'"
         "youtube-dl #{@video.source_url} #{FORMAT_ARG} #{options[:flags]} #{output}"
       end
 
