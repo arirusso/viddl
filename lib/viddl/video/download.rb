@@ -46,7 +46,8 @@ module Viddl
       # @option options [String] :flags Flags to pass to youtube-dl
       # @return [String]
       def command_line(options = {})
-        "youtube-dl #{@video.source_url} #{FORMAT_ARG} #{options[:flags]} -o '#{TEMPDIR}/#{@video.id}s.%(ext)s'"
+        output = "-o '#{TEMPDIR}/#{@video.id}s.%(ext)s'"
+        "youtube-dl #{@video.source_url} #{FORMAT_ARG} #{options[:flags]} #{output}"
       end
 
     end
