@@ -67,7 +67,11 @@ opts = OptionParser.new do |opts|
 
   opts.on_tail("--help", "Show this message") { help(opts) }
 
-  # file
+  # storage
+
+  opts.on("--download-path=PATH", "Download path") do |path|
+    options[:download_path] = path
+  end
 
   opts.on("-oPATH", "--output-path=PATH", "Output path") do |path|
     options[:output_path] = path
