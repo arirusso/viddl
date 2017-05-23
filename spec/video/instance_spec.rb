@@ -17,14 +17,14 @@ describe Viddl::Video::Instance do
 
   end
 
-  context "#source_filenames" do
+  context "#download_paths" do
 
     context "with associated download" do
 
-      it "pulls filenames from directory" do
+      it "delegates to download" do
         @download = Viddl::Video::Download.new(@video)
-        expect(Dir).to(receive(:[]))
-        @result = @video.source_filenames
+        expect(@download).to(receive(:paths))
+        @result = @video.download_paths
       end
 
     end
@@ -33,7 +33,7 @@ describe Viddl::Video::Instance do
 
       it "raises" do
         expect {
-          @video.source_filenames
+          @video.download_paths
         }.to(raise_error(RuntimeError))
       end
 
@@ -45,7 +45,7 @@ describe Viddl::Video::Instance do
 
     before(:each) do
       @download = Viddl::Video::Download.new(@video)
-      expect(@video).to(receive(:source_filenames).and_return(["#{Viddl::Video::Download::TEMPDIR}/#{@video_id}.mkv"]))
+      expect(@video).to(receive(:download_paths).and_return(["#{Viddl::Video::Download::DEFAULT_TEMPDIR}/#{@video_id}.mkv"]))
     end
 
     context "with no options" do

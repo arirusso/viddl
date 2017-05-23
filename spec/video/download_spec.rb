@@ -25,16 +25,37 @@ describe Viddl::Video::Download do
 
   context "#command_line" do
 
-    before(:each) do
-      @result = @download.send(:command_line)
+    context "with no download_path specified" do
+
+      before(:each) do
+        @result = @download.send(:command_line)
+      end
+
+      it "includes url" do
+        expect(@result).to(include(@source_url))
+      end
+
+      it "includes temp dir" do
+        expect(@result).to(include("#{Viddl::Video::Download::DEFAULT_TEMPDIR}/"))
+      end
+
     end
 
-    it "includes url" do
-      expect(@result).to(include(@source_url))
-    end
+    context "with download_path specified" do
 
-    it "includes temp dir" do
-      expect(@result).to(include("#{Viddl::Video::Download::TEMPDIR}/"))
+      before(:each) do
+        @path = "assets"
+        @result = @download.send(:command_line, download_path: "assets")
+      end
+
+      it "includes url" do
+        expect(@result).to(include(@source_url))
+      end
+
+      it "includes download_path" do
+        expect(@result).to(include(@path))
+      end
+
     end
 
   end
