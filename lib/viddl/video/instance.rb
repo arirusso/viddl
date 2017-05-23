@@ -31,25 +31,27 @@ module Viddl
       # @option options [Pathname, String] :output_path path where clip will be written. Can be directory or filename
       # @return [Array<Clip>]
       def create_clip(options = {})
-        source_filenames.map do |filename|
-          Clip.process(filename, options)
+        download_paths.map do |path|
+          Clip.process(path, options)
         end
       end
 
       # Download the video source
       # @param [Hash] options
+      # @option options [String, File] :download_path Path where download should be stored (default: system temp directory)
+      # @option options [String] :flags Flags to pass to youtube-dl
       # @return [Download]
       def process_download(options = {})
         @download = Download.process(self, options)
       end
 
-      # The downloaded source filenames
-      # @return [Array<String>]
-      def source_filenames
+      # The downloaded files to work from
+      # @return [Array<String>, Array<File>]
+      def download_paths
         if @download.nil?
           raise "File must be downloaded"
         else
-          @source_filenames = Dir["#{Download::TEMPDIR}/#{@id}*"]
+          @download.paths
         end
       end
 

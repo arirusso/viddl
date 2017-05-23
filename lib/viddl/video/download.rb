@@ -11,9 +11,12 @@ module Viddl
       # download format is forced to mp4 to optimize for quickness
       FORMAT_ARG = "-f 'best[ext=mp4]'"
 
+      attr_reader :paths
+
       # Download the given video
       # @param [Video::Instance] video
       # @param [Hash] options
+      # @option options [String, File] :download_path Path where download should be stored (default: system temp directory)
       # @option options [String] :flags Flags to pass to youtube-dl
       # @return [Download]
       def self.process(video, options = {})
@@ -30,24 +33,53 @@ module Viddl
 
       # Download the video file
       # @param [Hash] options
+      # @option options [String, File] :download_path Path where download should be stored (default: system temp directory)
       # @option options [String] :flags Flags to pass to youtube-dl
       # @return [Boolean]
       def process(options = {})
         cmd = command_line(options)
         result = Kernel.system(cmd)
-        raise(result.to_s) unless result
+        if result
+          @paths = Dir["#{path}*"]
+        else
+          raise(result.to_s)
+        end
         true
       end
 
       private
 
+      # The path where the download should be written
+      # @param [Hash] options
+      # @option options [String, File] :download_path Path where download should be stored (default: system temp directory)
+      # @return [String]
+      def path(options = {})
+        @download_path ||= build_path(options)
+      end
+
+      # Build the download path
+      # @param [Hash] options
+      # @option options [String, File] :download_path Path where download should be stored (default: system temp directory)
+      # @return [String]
+      def build_path(options = {})
+        if options[:download_path].nil?
+          "#{DEFAULT_TEMPDIR}/#{@video.id}"
+        elsif File.directory?(options[:download_path])
+          "#{options[:download_path]}/#{@video.id}"
+        else
+          options[:download_path]
+        end
+      end
+
       # Command line to download the video file
       # @param [Hash] options
+      # @option options [String, File] :download_path Path where download should be stored (default: system temp directory)
       # @option options [String] :flags Flags to pass to youtube-dl
       # @return [String]
       def command_line(options = {})
-        output = "-o '#{DEFAULT_TEMPDIR}/#{@video.id}s.%(ext)s'"
-        "youtube-dl #{@video.source_url} #{FORMAT_ARG} #{options[:flags]} #{output}"
+        download_path = path(options)
+        output_flag = "-o '#{download_path}.%(ext)s'"
+        "youtube-dl #{@video.source_url} #{FORMAT_ARG} #{options[:flags]} #{output_flag}"
       end
 
     end
